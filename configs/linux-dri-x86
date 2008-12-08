@@ -1,0 +1,10 @@
+# -*-makefile-*-
+# Configuration for linux-dri: Linux DRI hardware drivers for XFree86 & others
+
+include $(TOP)/configs/linux-dri
+
+CONFIG_NAME = linux-dri-x86
+
+ARCH_FLAGS = -m32 -mmmx -msse -msse2
+
+
