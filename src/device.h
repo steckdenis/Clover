@@ -16,11 +16,20 @@ public:
    inline struct pipe_screen *screen() const;
    inline struct pipe_winsys *winsys() const;
 
+   cl_int info(cl_device_info  opcode,
+               size_t          paramValueSize,
+               void *          paramValue,
+               size_t *        paramValueSizeRet) const;
+
 private:
+   void createCpuDevice();
+   void createGpuDevice();
+   void createAcceleratorDevice();
+private:
+   const cl_uint m_type;
+
    struct pipe_screen *m_screen;
    struct pipe_winsys *m_winsys;
-
-   cl_uint m_type;
 };
 
 inline cl_uint Device::type() const
