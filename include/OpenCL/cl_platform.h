@@ -30,7 +30,7 @@ extern "C" {
 
 #define CL_API_ENTRY
 #define CL_API_CALL
-#define CL_API_SUFFIX__VERSION_1_0  
+#define CL_API_SUFFIX__VERSION_1_0   
 
 #include <stdint.h>
 #include <stddef.h>
@@ -48,6 +48,45 @@ typedef uint64_t        cl_ulong    __attribute__((aligned(8)));
 typedef uint16_t        cl_half     __attribute__((aligned(2)));
 typedef float           cl_float    __attribute__((aligned(4)));
 typedef double          cl_double   __attribute__((aligned(8)));
+
+/* and a few goodies to go with them */
+#define CL_CHAR_BIT         8
+#define CL_SCHAR_MAX        127
+#define CL_SCHAR_MIN        (-127-1)
+#define CL_CHAR_MAX         CL_SCHAR_MAX
+#define CL_CHAR_MIN         CL_SCHAR_MIN
+#define CL_UCHAR_MAX        255
+#define CL_SHRT_MAX         32767
+#define CL_SHRT_MIN         (-32767-1)
+#define CL_USHRT_MAX        65535
+#define CL_INT_MAX          2147483647
+#define CL_INT_MIN          (-2147483647-1)
+#define CL_UINT_MAX         0xffffffffU
+#define CL_LONG_MAX         ((cl_long) 0x7FFFFFFFFFFFFFFFLL)
+#define CL_LONG_MIN         ((cl_long) -0x7FFFFFFFFFFFFFFFLL - 1LL)
+#define CL_ULONG_MAX        ((cl_ulong) 0xFFFFFFFFFFFFFFFFULL)
+
+#define CL_FLT_DIG          6
+#define CL_FLT_MANT_DIG     24
+#define CL_FLT_MAX_10_EXP   +38
+#define CL_FLT_MAX_EXP      +128
+#define CL_FLT_MIN_10_EXP   -37
+#define CL_FLT_MIN_EXP      -125
+#define CL_FLT_RADIX        2
+#define CL_FLT_MAX          0x1.fffffep127f
+#define CL_FLT_MIN          0x1.0p-126f
+#define CL_FLT_EPSILON      0x1.0p-23f
+
+#define CL_DBL_DIG          15
+#define CL_DBL_MANT_DIG     53
+#define CL_DBL_MAX_10_EXP   +308
+#define CL_DBL_MAX_EXP      +1024
+#define CL_DBL_MIN_10_EXP   -307
+#define CL_DBL_MIN_EXP      -1021
+#define CL_DBL_RADIX        2
+#define CL_DBL_MAX          0x1.fffffffffffffp1023
+#define CL_DBL_MIN          0x1.0p-1022
+#define CL_DBL_EPSILON      0x1.0p-52
 
 /*
  * Vector types 

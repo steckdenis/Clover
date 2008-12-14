@@ -28,14 +28,9 @@ create_cpu_device(cl_device_id *   devices,
 {
    struct pipe_winsys *pws = cpu_winsys();
    struct pipe_screen *screen = softpipe_create_screen(pws);
-   struct _cl_device_id *device;
+   Device *device = new Device(CL_DEVICE_TYPE_CPU);
 
-   device = CALLOC_STRUCT(_cl_device_id);
-   device->screen = screen;
-   device->winsys = pws;
-   device->type = CL_DEVICE_TYPE_CPU;
-
-   devices[0] = device;
+   devices[0] = (cl_device_id)device;
    *num_devices = 1;
 }
 
@@ -119,7 +114,7 @@ clGetDeviceInfo(cl_device_id    device,
 
    switch(opcode) {
    case CL_DEVICE_TYPE: {
-      ((cl_int*)param_value)[0] = device->type;
+      ((cl_int*)param_value)[0] = device->type();
    }
       break;
    case CL_DEVICE_VENDOR_ID:
@@ -171,8 +166,6 @@ clGetDeviceInfo(cl_device_id    device,
    case CL_DEVICE_MAX_SAMPLERS:
       break;
    case CL_DEVICE_MEM_BASE_ADDR_ALIGN:
-      break;
-   case CL_DEVICE_MAX_DATA_TYPE_ALIGN_SIZE:
       break;
    case CL_DEVICE_SINGLE_FP_CONFIG:
       break;

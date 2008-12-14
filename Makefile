@@ -14,7 +14,8 @@ CL_SOURCES = \
         src/api_platform.cpp \
         src/api_profiling.cpp \
         src/api_program.cpp \
-        src/api_sampler.cpp
+        src/api_sampler.cpp \
+	src/device.cpp
 
 CPUWS_SOURCES = \
 	cpuwinsys/cpuwinsys.c
