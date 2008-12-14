@@ -44,7 +44,7 @@ CL_LIB = OpenCL
 # Library names (actual file names)
 CL_LIB_NAME = lib$(CL_LIB).so
 
-
+SYS_LIBS = -lstdc++
 # Directories to build
 LIB_DIR = lib
 SRC_DIRS = gallium mesa gallium/winsys

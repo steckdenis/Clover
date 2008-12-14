@@ -57,7 +57,8 @@ GALLIUM_LIBS = \
 	$(GALLIUM)/src/gallium/auxiliary/translate/libtranslate.a \
 	$(GALLIUM)/src/gallium/auxiliary/cso_cache/libcso_cache.a \
 	$(GALLIUM)/src/gallium/auxiliary/tgsi/libtgsi.a \
-	$(GALLIUM)/src/gallium/auxiliary/util/libutil.a
+	$(GALLIUM)/src/gallium/auxiliary/util/libutil.a \
+	$(GALLIUM)/src/gallium/drivers/softpipe/libsoftpipe.a
 
 .SUFFIXES : .cpp
 

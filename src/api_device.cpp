@@ -79,21 +79,24 @@ clGetDeviceIDs(cl_device_type   device_type,
         cl_uint num_gpus = 0;
         create_gpu_device(devices, &num_gpus, num_entries);
         num_entries -= num_gpus;
-        *num_devices += num_gpus;
+        if (num_devices)
+           *num_devices += num_gpus;
     }
 
     if (cpu && num_entries > 0) {
         cl_uint num_cpus = 0;
         create_cpu_device(devices, &num_cpus, num_entries);
         num_entries -= num_cpus;
-        *num_devices += num_cpus;
+        if (num_devices)
+           *num_devices += num_cpus;
     }
 
     if (accelerator && num_entries) {
         cl_uint num_accels = 0;
         create_accel_device(devices, &num_accels, num_entries);
         num_entries -= num_accels;
-        *num_devices += num_accels;
+        if (num_devices)
+           *num_devices += num_accels;
     }
 
     if (original_num_entries == num_entries)
