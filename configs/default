@@ -21,7 +21,6 @@ CXX = CC
 HOST_CC = $(CC)
 CFLAGS = -O
 CXXFLAGS = -O
-GLU_CFLAGS = 
 
 # Compiler for building demos/tests/etc
 APP_CC = $(CC)
@@ -39,38 +38,22 @@ PYTHON2 = python
 PYTHON_FLAGS = -t -O -O
 
 # Library names (base name)
-GL_LIB = GL
-GLU_LIB = GLU
-GLUT_LIB = glut
-GLW_LIB = GLw
-OSMESA_LIB = OSMesa
+CL_LIB = OpenCL
 
 
 # Library names (actual file names)
-GL_LIB_NAME = lib$(GL_LIB).so
-GLU_LIB_NAME = lib$(GLU_LIB).so
-GLUT_LIB_NAME = lib$(GLUT_LIB).so
-GLW_LIB_NAME = lib$(GLW_LIB).so
-OSMESA_LIB_NAME = lib$(OSMESA_LIB).so
-
-
-# Optional assembly language optimization files for libGL
-
-# GLw widget sources (Append "GLwMDrawA.c" here and add -lXm to GLW_LIB_DEPS in
-# order to build the Motif widget too)
-GLW_SOURCES = GLwDrawA.c
+CL_LIB_NAME = lib$(CL_LIB).so
 
 
 # Directories to build
 LIB_DIR = lib
 SRC_DIRS = gallium mesa gallium/winsys
-GLU_DIRS = sgi
-DRIVER_DIRS = 
+DRIVER_DIRS =
 # Which subdirs under $(TOP)/progs/ to enter:
 PROGRAM_DIRS =
 
 
-# Gallium directories and 
+# Gallium directories and
 GALLIUM_AUXILIARY_DIRS = draw translate cso_cache pipebuffer tgsi rtasm util
 GALLIUM_AUXILIARIES = $(foreach DIR,$(GALLIUM_AUXILIARY_DIRS),$(GALLIUM)/src/gallium/auxiliary/$(DIR)/lib$(DIR).a)
 GALLIUM_DRIVER_DIRS = softpipe i915simple i965simple failover
@@ -80,19 +63,5 @@ GALLIUM_WINSYS_DIRS = iegd
 
 # Library/program dependencies
 #EXTRA_LIB_PATH ?=
-GL_LIB_DEPS     = $(EXTRA_LIB_PATH) -lX11 -lXext -lm -lpthread
-OSMESA_LIB_DEPS = $(EXTRA_LIB_PATH) -L$(TOP)/$(LIB_DIR) -l$(GL_LIB)
-GLU_LIB_DEPS    = $(EXTRA_LIB_PATH) -L$(TOP)/$(LIB_DIR) -l$(GL_LIB) -lm
-GLUT_LIB_DEPS   = $(EXTRA_LIB_PATH) -L$(TOP)/$(LIB_DIR) -l$(GLU_LIB) -l$(GL_LIB) -lX11 -lXmu -lXi -lm
-GLW_LIB_DEPS    = $(EXTRA_LIB_PATH) -L$(TOP)/$(LIB_DIR) -l$(GL_LIB) -lXt -lX11
-APP_LIB_DEPS    = $(EXTRA_LIB_PATH) -L$(TOP)/$(LIB_DIR) -l$(GLUT_LIB) -l$(GLU_LIB) -l$(GL_LIB) -lm
-
-
-
-# Installation directories (for make install)
-INSTALL_DIR = /usr/local
-DRI_DRIVER_INSTALL_DIR = /usr/X11R6/lib/modules/dri
-
-# Where libGL will look for DRI hardware drivers
-DRI_DRIVER_SEARCH_DIR = $(DRI_DRIVER_INSTALL_DIR)
-
+CL_LIB_DEPS     = $(EXTRA_LIB_PATH) -lm -lpthread
+APP_LIB_DEPS    = $(EXTRA_LIB_PATH) -L$(TOP)/$(LIB_DIR) -l$(CL_LIB) -lm
