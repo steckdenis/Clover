@@ -1,6 +1,8 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
+#include "deviceinfo.h"
+
 #include "OpenCL/cl.h"
 
 struct pipe_screen;
@@ -10,8 +12,8 @@ struct pipe_winsys;
 class Device
 {
 public:
-   Device(cl_uint type);
-
+   static Device *create(cl_uint type);
+public:
    inline cl_uint type() const;
    inline struct pipe_screen *screen() const;
    inline struct pipe_winsys *winsys() const;
@@ -22,19 +24,20 @@ public:
                size_t *        paramValueSizeRet) const;
 
 private:
-   void createCpuDevice();
-   void createGpuDevice();
-   void createAcceleratorDevice();
-private:
-   const cl_uint m_type;
+   Device(cl_uint type, struct pipe_winsys *ws,
+          struct pipe_screen *screen);
+   void fillInfo();
 
-   struct pipe_screen *m_screen;
+private:
+   DeviceInfo m_info;
+
    struct pipe_winsys *m_winsys;
+   struct pipe_screen *m_screen;
 };
 
 inline cl_uint Device::type() const
 {
-   return m_type;
+   return m_info.type;
 }
 
 inline struct pipe_screen *Device::screen() const

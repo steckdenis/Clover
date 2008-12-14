@@ -12,35 +12,19 @@
 #include "softpipe/sp_winsys.h"
 
 
-
-Device::Device(cl_uint type)
-   : m_type(type)
+Device * Device::create(cl_uint type)
 {
-   switch(m_type) {
-   case CL_DEVICE_TYPE_CPU:
-      createCpuDevice();
+   switch(type) {
+   case CL_DEVICE_TYPE_CPU: {
+      struct pipe_winsys *ws = cpu_winsys();
+      struct pipe_screen *screen =
+         softpipe_create_screen(ws);
+      return new Device(CL_DEVICE_TYPE_CPU, ws, screen);
+   }
       break;
    case CL_DEVICE_TYPE_GPU:
-      createGpuDevice();
       break;
    case CL_DEVICE_TYPE_ACCELERATOR:
-      createAcceleratorDevice();
-      break;
-   }
-}
-
-void Device::createCpuDevice()
-{
-   m_winsys = cpu_winsys();
-   m_screen = softpipe_create_screen(m_winsys);
-}
-
-void Device::createGpuDevice()
-{
-}
-
-void Device::createAcceleratorDevice()
-{
 #ifdef GALLIUM_CELL
     if (!getenv("GALLIUM_NOCELL")) {
         struct cell_winsys *cws = cell_get_winsys(pixelformat);
@@ -49,6 +33,9 @@ void Device::createAcceleratorDevice()
         pipe = cell_create_context(screen, cws);
     }
 #endif
+      break;
+   }
+   return 0;
 }
 
 cl_int Device::info(cl_device_info opcode,
@@ -163,4 +150,16 @@ cl_int Device::info(cl_device_info opcode,
    }
 
    return CL_SUCCESS;
+}
+
+Device::Device(cl_uint type, struct pipe_winsys *ws,
+               struct pipe_screen *screen)
+   : m_winsys(ws), m_screen(screen)
+{
+   m_info.type = type;
+   fillInfo();
+}
+
+void Device::fillInfo()
+{
 }
