@@ -3,38 +3,43 @@ include $(TOP)/configs/current
 
 
 CL_SOURCES = \
-        src/api_command.c \
-        src/api_context.c \
-        src/api_device.c \
-        src/api_enqueue.c \
-        src/api_event.c \
-        src/api_flush.c \
-        src/api_kernel.c \
-        src/api_memory.c \
-        src/api_platform.c \
-        src/api_profiling.c \
-        src/api_program.c \
-        src/api_sampler.c \
-        cpuwinsys/cpuwinsys.c
+        src/api_command.cpp \
+        src/api_context.cpp \
+        src/api_device.cpp \
+        src/api_enqueue.cpp \
+        src/api_event.cpp \
+        src/api_flush.cpp \
+        src/api_kernel.cpp \
+        src/api_memory.cpp \
+        src/api_platform.cpp \
+        src/api_profiling.cpp \
+        src/api_program.cpp \
+        src/api_sampler.cpp
 
+CPUWS_SOURCES = \
+	cpuwinsys/cpuwinsys.c
 
 ### All the core C sources
 
 ALL_SOURCES = \
-        $(CL_SOURCES)
+        $(CL_SOURCES) \
+	$(CPUWS_SOURCES)
 
 
 ### Object files
 CL_OBJECTS = \
-	$(CL_SOURCES:.c=.o)
+	$(CL_SOURCES:.cpp=.o) \
+	$(CPUWS_SOURCES:.c=.o)
 
 ### Include directories
 
 INCLUDE_DIRS = \
+	-I$(TOP) \
 	-I$(TOP)/include \
 	-I$(GALLIUM)/include \
 	-I$(GALLIUM)/src/gallium/include \
-	-I$(GALLIUM)/src/gallium/auxiliary
+	-I$(GALLIUM)/src/gallium/auxiliary \
+	-I$(GALLIUM)/src/gallium/drivers
 
 CL_LIB = OpenCL
 CL_LIB_NAME = lib$(CL_LIB).so

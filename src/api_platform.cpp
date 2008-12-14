@@ -15,20 +15,20 @@ clGetPlatformInfo(cl_platform_info param_name,
                   void *           param_value,
                   size_t *         param_value_size_ret)
 {
-    switch(param_name) {
-    case CL_PLATFORM_PROFILE:
-        strcpy(param_value, PROFILE_STR);
-        *param_value_size_ret = PROFILE_STR_LEN;
-        break;
+   switch(param_name) {
+   case CL_PLATFORM_PROFILE:
+      strcpy((char*)param_value, PROFILE_STR);
+      *param_value_size_ret = PROFILE_STR_LEN;
+      break;
 
-    case CL_PLATFORM_VERSION:
-        strcpy(param_value, VERSION_STR);
-        *param_value_size_ret = VERSION_STR_LEN;
-        break;
+   case CL_PLATFORM_VERSION:
+      strcpy((char*)param_value, VERSION_STR);
+      *param_value_size_ret = VERSION_STR_LEN;
+      break;
 
-    default:
-        return CL_INVALID_VALUE;
-    }
+   default:
+      return CL_INVALID_VALUE;
+   }
 
-    return CL_SUCCESS;
+   return CL_SUCCESS;
 }

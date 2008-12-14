@@ -2,6 +2,15 @@
 #include <OpenCL/cl_platform.h>
 
 #include "device.h"
+#include "cpuwinsys/cpuwinsys.h"
+
+
+#include "pipe/p_screen.h"
+#include "pipe/p_format.h"
+#include "pipe/p_winsys.h"
+#include "util/u_memory.h"
+
+#include "softpipe/sp_winsys.h"
 
 // Device APIs
 
@@ -17,6 +26,17 @@ create_cpu_device(cl_device_id *   devices,
                   cl_uint *        num_devices,
                   cl_uint          num_entries)
 {
+   struct pipe_winsys *pws = cpu_winsys();
+   struct pipe_screen *screen = softpipe_create_screen(pws);
+   struct _cl_device_id *device;
+
+   device = CALLOC_STRUCT(_cl_device_id);
+   device->screen = screen;
+   device->winsys = pws;
+   device->type = CL_DEVICE_TYPE_CPU;
+
+   devices[0] = device;
+   *num_devices = 1;
 }
 
 static void

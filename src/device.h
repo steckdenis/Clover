@@ -3,10 +3,14 @@
 
 #include "OpenCL/cl.h"
 
-struct _cl_device_id {
-    struct pipe_screen *screen;
+struct pipe_screen;
+struct pipe_winsys;
 
-    cl_uint type;
+struct _cl_device_id {
+   struct pipe_screen *screen;
+   struct pipe_winsys *winsys;
+
+   cl_uint type;
 };
 
 #endif
