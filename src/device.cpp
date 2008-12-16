@@ -38,6 +38,15 @@ Device * Device::create(cl_uint type)
    return 0;
 }
 
+static void stringToParam(const std::string &str,
+                          void * paramValue,
+                          size_t * paramValueSizeRet)
+{
+   strcpy((char*)paramValue, str.c_str());
+   if (paramValueSizeRet)
+      *paramValueSizeRet = str.size();
+}
+
 cl_int Device::info(cl_device_info opcode,
                     size_t paramValueSize,
                     void * paramValue,
@@ -132,8 +141,10 @@ cl_int Device::info(cl_device_info opcode,
    case CL_DEVICE_QUEUE_PROPERTIES:
       break;
    case CL_DEVICE_NAME:
+      stringToParam(m_info.name, paramValue, paramValueSizeRet);
       break;
    case CL_DEVICE_VENDOR:
+      stringToParam(m_info.name, paramValue, paramValueSizeRet);
       break;
    case CL_DRIVER_VERSION:
       break;
@@ -156,10 +167,64 @@ Device::Device(cl_uint type, struct pipe_winsys *ws,
                struct pipe_screen *screen)
    : m_winsys(ws), m_screen(screen)
 {
-   m_info.type = type;
-   fillInfo();
+   fillInfo(type);
 }
 
-void Device::fillInfo()
+void Device::fillInfo(cl_uint type)
 {
+   m_info.type = type;
+   m_info.vendorId = 0;//should be a PCIe ID
+   m_info.maxComputeUnits = 1;//min
+   m_info.maxWorkItemDimensions = 3;//min
+#if 0
+   m_info.maxWorkGroupSize = ;
+   m_info.maxWorkItemSizes = ;
+   m_info.preferredVectorWidthChar = ;
+   m_info.preferredVectorWidthShort = ;
+   m_info.preferredVectorWidthInt = ;
+   m_info.preferredVectorWidthLong = ;
+   m_info.preferredVectorWidthFloat = ;
+   m_info.preferredVectorWidthDouble = ;
+
+   m_info.maxClockFrequency = ;
+   m_info.addressBits = ;
+   m_info.maxReadImageArgs = ;
+   m_info.maxWriteImageArgs = ;
+   m_info.maxMemAllocSize = ;
+
+   m_info.image2dMaxWidth = ;
+   m_info.image2dMaxHeight = ;
+   m_info.image3dMaxWidth = ;
+   m_info.image3dMaxHeight = ;
+   m_info.image3dMaxDepth = ;
+   m_info.imageSupport = ;
+
+   m_info.maxParameterSize = ;
+   m_info.maxSamplers = ;
+   m_info.memBaseAddrAlign = ;
+   m_info.minDataTypeAlignSize = ;
+   m_info.singleFpConfig = ;
+   m_info.globalMemCacheType = ;
+   m_info.globalMemCachelineSize = ;
+   m_info.globalMemCacheSize = ;
+   m_info.globalMemSize = ;
+   m_info.maxConstantBufferSize = ;
+   m_info.maxConstantArgs = ;
+   m_info.localMemType = ;
+   m_info.localMemSize = ;
+   m_info.errorCorrectionSupport = ;
+   m_info.profilingTimerResolution = ;
+   m_info.entianLittle = ;
+   m_info.available = ;
+   m_info.compilerAvailable = ;
+   m_info.executionCapabilities = ;
+   m_info.queueProperties = ;
+
+#endif
+   m_info.name = m_screen->get_name(m_screen);
+   m_info.vendor = m_screen->get_vendor(m_screen);
+   //m_info.driverVersion = ;
+   m_info.profile = "FULL_PROFILE";
+   //m_info.version = ;
+   //m_info.extensions = ;
 }

@@ -5,9 +5,9 @@ int main()
 {
    cl_device_id   	device;
    int err;
-   char deviceName[256],
-      deviceVendor[256],
-      deviceVersion[256];
+   char deviceName[128],
+      deviceVendor[128],
+      deviceVersion[128];
 
    err = clGetDeviceIDs(CL_DEVICE_TYPE_DEFAULT, 1, &device, NULL);
 

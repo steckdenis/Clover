@@ -26,7 +26,7 @@ public:
 private:
    Device(cl_uint type, struct pipe_winsys *ws,
           struct pipe_screen *screen);
-   void fillInfo();
+   void fillInfo(cl_uint type);
 
 private:
    DeviceInfo m_info;
