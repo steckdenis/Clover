@@ -1,2 +1,5 @@
 depend
 depend.bak
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
