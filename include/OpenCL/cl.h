@@ -219,7 +219,7 @@ typedef struct _cl_image_format {
 
 // cl_device_exec_capabilities - bitfield
 #define CL_EXEC_KERNEL                              (1 << 0)
-#define CL_EXEC_NATIVE_FN_AS_KERNEL                 (1 << 1)
+#define CL_EXEC_NATIVE_KERNEL                       (1 << 1)
 
 // cl_command_queue_properties - bitfield
 #define CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE      (1 << 0)

@@ -15,6 +15,13 @@ add_library(OpenCL SHARED
         api_memory.cpp  api_profiling.cpp
         api_sampler.cpp ../cpuwinsys/cpuwinsys.c)
 
+SET(LIBRARY_OUTPUT_PATH ${Clover_BINARY_DIR}/lib)
+
+SET_TARGET_PROPERTIES(OpenCL PROPERTIES
+  VERSION ${${PROJECT_NAME}_VERSION}
+  SOVERSION ${${PROJECT_NAME}_SOVERSION} )
+#message(STATUS "some project ${${PROJECT_NAME}_VERSION}")
+
 TARGET_LINK_LIBRARIES(OpenCL
         ${GALLIUM}/src/gallium/auxiliary/pipebuffer/libpipebuffer.a
         ${GALLIUM}/src/gallium/auxiliary/sct/libsct.a
