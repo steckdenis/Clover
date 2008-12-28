@@ -35,7 +35,7 @@ clGetCommandQueueInfo(cl_command_queue      command_queue,
 cl_int
 clSetCommandQueueProperty(cl_command_queue              command_queue,
                           cl_command_queue_properties   properties,
-                          cl_int                        enable,
+                          cl_bool                       enable,
                           cl_command_queue_properties * old_properties)
 {
     return 0;
