@@ -30,6 +30,6 @@ TARGET_LINK_LIBRARIES(OpenCL
         ${GALLIUM}/src/gallium/auxiliary/translate/libtranslate.a
         ${GALLIUM}/src/gallium/auxiliary/cso_cache/libcso_cache.a
         ${GALLIUM}/src/gallium/auxiliary/tgsi/libtgsi.a
-        ${GALLIUM}/src/gallium/auxiliary/util/libutil.a
         ${GALLIUM}/src/gallium/drivers/softpipe/libsoftpipe.a
+        ${GALLIUM}/src/gallium/auxiliary/util/libutil.a
         )
