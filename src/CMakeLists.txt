@@ -13,7 +13,8 @@ add_library(OpenCL SHARED
         device.cpp api_context.cpp
         api_enqueue.cpp  api_flush.cpp
         api_memory.cpp  api_profiling.cpp
-        api_sampler.cpp ../cpuwinsys/cpuwinsys.c)
+        api_sampler.cpp api_gl.cpp
+        ../cpuwinsys/cpuwinsys.c)
 
 SET(LIBRARY_OUTPUT_PATH ${Clover_BINARY_DIR}/lib)
 
