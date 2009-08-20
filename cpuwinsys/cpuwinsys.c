@@ -1,6 +1,6 @@
 #include "cpuwinsys.h"
 
-#include "pipe/p_winsys.h"
+#include "pipe/internal/p_winsys_screen.h"
 #include "pipe/p_format.h"
 #include "pipe/p_context.h"
 #include "pipe/p_inlines.h"
@@ -105,7 +105,6 @@ cpu_buffer_create(struct pipe_winsys *pws,
 {
    struct cpu_buffer *buffer = CALLOC_STRUCT(cpu_buffer);
 
-   buffer->base.refcount = 1;
    buffer->base.alignment = alignment;
    buffer->base.usage = usage;
    buffer->base.size = size;
@@ -126,7 +125,6 @@ static struct pipe_buffer *
 cpu_user_buffer_create(struct pipe_winsys *pws, void *ptr, unsigned bytes)
 {
    struct cpu_buffer *buffer = CALLOC_STRUCT(cpu_buffer);
-   buffer->base.refcount = 1;
    buffer->base.size = bytes;
    buffer->userBuffer = TRUE;
    buffer->data = ptr;
@@ -158,24 +156,7 @@ cpu_surface_alloc_storage(struct pipe_winsys *winsys,
    surf->width = width;
    surf->height = height;
    surf->format = format;
-   pf_get_block(format, &surf->block);
-   surf->nblocksx = pf_get_nblocksx(&surf->block, width);
-   surf->nblocksy = pf_get_nblocksy(&surf->block, height);
-   surf->stride = round_up(surf->nblocksx * surf->block.size, alignment);
    surf->usage = flags;
-
-   assert(!surf->buffer);
-   surf->buffer = winsys->buffer_create(winsys, alignment,
-                                        PIPE_BUFFER_USAGE_PIXEL,
-#ifdef GALLIUM_CELL /* XXX a bit of a hack */
-                                        surf->stride *
-                                        round_up(surf->nblocksy, TILE_SIZE));
-#else
-                                        surf->stride * surf->nblocksy);
-#endif
-
-   if(!surf->buffer)
-      return -1;
 
    return 0;
 }
@@ -191,9 +172,6 @@ cpu_surface_alloc(struct pipe_winsys *ws)
 
    assert(ws);
 
-   surface->refcount = 1;
-   surface->winsys = ws;
-
    return surface;
 }
 
@@ -204,12 +182,6 @@ cpu_surface_release(struct pipe_winsys *winsys, struct pipe_surface **s)
 {
    struct pipe_surface *surf = *s;
    assert(!surf->texture);
-   surf->refcount--;
-   if (surf->refcount == 0) {
-      if (surf->buffer)
-         winsys_buffer_reference(winsys, &surf->buffer, NULL);
-      free(surf);
-   }
    *s = NULL;
 }
 
@@ -255,11 +227,6 @@ struct pipe_winsys * cpu_winsys(void)
       ws->base.user_buffer_create = cpu_user_buffer_create;
       ws->base.buffer_map = cpu_buffer_map;
       ws->base.buffer_unmap = cpu_buffer_unmap;
-      ws->base.buffer_destroy = cpu_buffer_destroy;
-
-      ws->base.surface_alloc = cpu_surface_alloc;
-      ws->base.surface_alloc_storage = cpu_surface_alloc_storage;
-      ws->base.surface_release = cpu_surface_release;
 
       ws->base.fence_reference = cpu_fence_reference;
       ws->base.fence_signalled = cpu_fence_signalled;
