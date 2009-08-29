@@ -22,6 +22,7 @@ private:
 private:
    clang::LangOptions m_langOptions;
    clang::CompileOptions m_compileOptions;
+   std::string m_targetCpu;
 };
 
 #endif

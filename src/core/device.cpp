@@ -17,7 +17,7 @@ Device * Device::create(cl_uint type)
    case CL_DEVICE_TYPE_CPU: {
       struct pipe_winsys *ws = cpu_winsys();
       struct pipe_screen *screen =
-         softpipe_create_screen(ws);
+         /*softpipe_create_screen(ws);*/ 0;
       return new Device(CL_DEVICE_TYPE_CPU, screen);
    }
       break;

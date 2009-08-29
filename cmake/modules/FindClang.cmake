@@ -1,0 +1,40 @@
+# Detect CLANG
+if (NOT CLANG_SRC_DIR OR NOT CLANG_BUILD_DIR)
+   message(FATAL_ERROR "Define CLANG_SRC_DIR and CLANG_BUILD_DIR to build Clover")
+else (NOT CLANG_SRC_DIR OR NOT CLANG_BUILD_DIR)
+
+MACRO(FIND_AND_ADD_CLANG_LIB _libname_)
+find_library(CLANG_${_libname_}_LIB ${_libname_} ${CLANG_SRC_DIR}/Debug/lib ${CLANG_BUILD_DIR}/Debug/lib)
+if (CLANG_${_libname_}_LIB)
+   set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_libname_}_LIB})
+endif(CLANG_${_libname_}_LIB)
+ENDMACRO(FIND_AND_ADD_CLANG_LIB)
+
+set(CLANG_INCLUDE_DIRS ${CLANG_INCLUDE_DIRS} ${CLANG_SRC_DIR}/tools/clang/include)
+set(CLANG_INCLUDE_DIRS ${CLANG_INCLUDE_DIRS} ${CLANG_BUILD_DIR}/tools/clang/include)
+
+FIND_AND_ADD_CLANG_LIB(clangFrontend)
+FIND_AND_ADD_CLANG_LIB(clangCodeGen)
+FIND_AND_ADD_CLANG_LIB(clangAnalysis)
+FIND_AND_ADD_CLANG_LIB(clangRewrite)
+FIND_AND_ADD_CLANG_LIB(clangSema)
+FIND_AND_ADD_CLANG_LIB(clangAST)
+FIND_AND_ADD_CLANG_LIB(clangParse)
+FIND_AND_ADD_CLANG_LIB(clangLex)
+FIND_AND_ADD_CLANG_LIB(clangBasic)
+
+MESSAGE(STATUS "Clang libs: " ${CLANG_LIBS})
+
+if(CLANG_LIBS)
+  set(CLANG_FOUND TRUE)
+endif(CLANG_LIBS)
+
+if(CLANG_FOUND)
+  message(STATUS "Found Clang: ${CLANG_INCLUDE_DIRS}")
+else(CLANG_FOUND)
+  if(CLANG_FIND_REQUIRED)
+    message(FATAL_ERROR "Could NOT find Clang")
+  endif(CLANG_FIND_REQUIRED)
+endif(CLANG_FOUND)
+
+endif (NOT CLANG_SRC_DIR OR NOT CLANG_BUILD_DIR)

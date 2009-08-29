@@ -15,7 +15,9 @@ SET(${PROJECT_NAME}_SOVERSION 1.0.0)
 
 OPTION(BUILD_SHARED_LIBS "Set to OFF to build static libraries" ON)
 
+Find_Package(Gallium REQUIRED)
 Find_Package(LLVM REQUIRED)
+Find_Package(Clang REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(examples)
