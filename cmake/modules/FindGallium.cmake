@@ -21,7 +21,10 @@ FIND_AND_ADD_GALLIUM_LIB(rtasm)
 FIND_AND_ADD_GALLIUM_LIB(translate)
 FIND_AND_ADD_GALLIUM_LIB(cso_cache)
 FIND_AND_ADD_GALLIUM_LIB(tgsi)
-FIND_AND_ADD_GALLIUM_LIB(util)
+
+#FIXME: always some other libutil is found
+#FIND_AND_ADD_GALLIUM_LIB(util)
+set(GALLIUM_LIBS ${GALLIUM_LIBS} ${GALLIUM_DIR}//src/gallium/auxiliary/util/libutil.a)
 
 MESSAGE(STATUS "Gallium libs: " ${GALLIUM_LIBS})
 
