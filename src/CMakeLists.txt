@@ -1,5 +1,5 @@
 include_directories (${Clover_SOURCE_DIR}/include
-                    ${Clover_SOURCE_DIR}
+                    ${Clover_SOURCE_DIR}/src
                     ${LLVM_INCLUDE_DIR}
                     ${GALLIUM_INCLUDE_DIRS}
                     ${CLANG_INCLUDE_DIRS}
@@ -8,15 +8,16 @@ include_directories (${Clover_SOURCE_DIR}/include
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
 set(CLOVER_SRC_FILES
-    core/api_command.cpp  core/api_device.cpp
-    core/api_event.cpp  core/api_kernel.cpp
-    core/api_platform.cpp   core/api_program.cpp
-    core/device.cpp core/api_context.cpp
-    core/api_enqueue.cpp  core/api_flush.cpp
-    core/api_memory.cpp  core/api_profiling.cpp
-    core/api_sampler.cpp core/api_gl.cpp
+    api/api_command.cpp  api/api_device.cpp
+    api/api_event.cpp  api/api_kernel.cpp
+    api/api_platform.cpp   api/api_program.cpp
+    api/api_context.cpp
+    api/api_enqueue.cpp  api/api_flush.cpp
+    api/api_memory.cpp  api/api_profiling.cpp
+    api/api_sampler.cpp api/api_gl.cpp
+    core/device.cpp
     compiler/compiler.cpp
-    ../cpuwinsys/cpuwinsys.c)
+    cpuwinsys/cpuwinsys.c)
 
 add_library(OpenCL SHARED ${CLOVER_SRC_FILES})
 

@@ -1,7 +1,7 @@
 #include "OpenCL/cl.h"
 #include "OpenCL/cl_platform.h"
 
-#include "device.h"
+#include "core/device.h"
 
 #include "pipe/p_screen.h"
 #include "pipe/p_format.h"
