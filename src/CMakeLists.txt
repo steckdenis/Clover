@@ -16,6 +16,7 @@ set(CLOVER_SRC_FILES
     api/api_memory.cpp  api/api_profiling.cpp
     api/api_sampler.cpp api/api_gl.cpp
     core/device.cpp
+    core/context.cpp
     compiler/compiler.cpp
     cpuwinsys/cpuwinsys.c)
 

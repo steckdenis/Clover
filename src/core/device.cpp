@@ -219,8 +219,8 @@ void Device::fillInfo(cl_uint type)
    m_info.queueProperties = ;
 
 #endif
-   m_info.name = m_screen->get_name(m_screen);
-   m_info.vendor = m_screen->get_vendor(m_screen);
+   //m_info.name = m_screen->get_name(m_screen);
+   //m_info.vendor = m_screen->get_vendor(m_screen);
    //m_info.driverVersion = ;
    m_info.profile = "FULL_PROFILE";
    //m_info.version = ;
