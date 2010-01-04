@@ -21,3 +21,9 @@ Find_Package(Clang REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(examples)
+
+IF (BUILD_TESTS)
+    ENABLE_TESTING()
+    Find_Package(Check REQUIRED)
+    add_subdirectory(tests)
+ENDIF (BUILD_TESTS)
