@@ -39,9 +39,12 @@ Device * Device::create(cl_uint type)
 
 static void stringToParam(const std::string &str,
                           void * paramValue,
+                          size_t paramValueSize,
                           size_t * paramValueSizeRet)
 {
-   strcpy((char*)paramValue, str.c_str());
+   char *paramCharValue = (char *)paramValue;
+   paramCharValue[paramValueSize - 1] = 0;
+   strncpy(paramCharValue, str.c_str(), paramValueSize - 1);
    if (paramValueSizeRet)
       *paramValueSizeRet = str.size();
 }
@@ -51,8 +54,14 @@ cl_int Device::info(cl_device_info opcode,
                     void * paramValue,
                     size_t * paramValueSizeRet) const
 {
+   if (!paramValue)
+       return CL_SUCCESS;
+
    switch (opcode) {
    case CL_DEVICE_TYPE:
+      if (paramValueSizeRet)
+         *paramValueSizeRet = sizeof(type());
+
       ((cl_int*)paramValue)[0] = type();
       break;
    case CL_DEVICE_VENDOR_ID:
@@ -140,10 +149,10 @@ cl_int Device::info(cl_device_info opcode,
    case CL_DEVICE_QUEUE_PROPERTIES:
       break;
    case CL_DEVICE_NAME:
-      stringToParam(m_info.name, paramValue, paramValueSizeRet);
+      stringToParam(m_info.name, paramValue, paramValueSize, paramValueSizeRet);
       break;
    case CL_DEVICE_VENDOR:
-      stringToParam(m_info.name, paramValue, paramValueSizeRet);
+      stringToParam(m_info.name, paramValue, paramValueSize, paramValueSizeRet);
       break;
    case CL_DRIVER_VERSION:
       break;
@@ -158,6 +167,9 @@ cl_int Device::info(cl_device_info opcode,
       return CL_INVALID_VALUE;
       break;
    }
+
+   if (paramValueSizeRet && paramValueSize != *paramValueSizeRet)
+      return CL_INVALID_VALUE;
 
    return CL_SUCCESS;
 }

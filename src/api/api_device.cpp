@@ -73,13 +73,13 @@ clGetDeviceIDs(cl_device_type   device_type,
 
     gpu = (device_type & CL_DEVICE_TYPE_DEFAULT) ||
           (device_type & CL_DEVICE_TYPE_GPU) ||
-          (device_type & CL_DEVICE_TYPE_ALL);
+          !(device_type ^ CL_DEVICE_TYPE_ALL);
 
     cpu = (device_type & CL_DEVICE_TYPE_CPU) ||
-          (device_type & CL_DEVICE_TYPE_ALL);
+          !(device_type ^ CL_DEVICE_TYPE_ALL);
 
     accelerator = (device_type & CL_DEVICE_TYPE_ACCELERATOR) ||
-                  (device_type & CL_DEVICE_TYPE_ALL);
+                  !(device_type ^ CL_DEVICE_TYPE_ALL);
 
     if (!gpu && !cpu && !accelerator)
         return CL_INVALID_DEVICE_TYPE;
