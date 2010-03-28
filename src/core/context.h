@@ -1,7 +1,7 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include "OpenCL/cl.h"
+#include "CL/cl.h"
 #include "pipe/p_context.h"
 
 struct _cl_context {

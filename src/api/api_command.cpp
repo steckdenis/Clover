@@ -1,4 +1,4 @@
-#include <OpenCL/cl.h>
+#include <CL/cl.h>
 
 // Command Queue APIs
 cl_command_queue

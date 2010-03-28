@@ -1,4 +1,4 @@
-#include <OpenCL/cl.h>
+#include "CL/cl.h"
 
 // Program Object APIs
 cl_program

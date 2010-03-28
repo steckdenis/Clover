@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-project(Clover)
+project(Coal)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 SET(${PROJECT_NAME}_MAJOR_VERSION 0)
 SET(${PROJECT_NAME}_MINOR_VERSION 1)
 SET(${PROJECT_NAME}_PATCH_LEVEL 0)
-# clover version
+# Coal version
 SET(${PROJECT_NAME}_VERSION 0.1.0)
 # OpenCL version
 SET(${PROJECT_NAME}_SOVERSION 1.0.0)

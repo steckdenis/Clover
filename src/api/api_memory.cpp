@@ -1,4 +1,4 @@
-#include <OpenCL/cl.h>
+#include "CL/cl.h"
 
 
 // Memory Object APIs

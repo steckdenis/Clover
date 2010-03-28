@@ -3,7 +3,7 @@
 
 #include "deviceinfo.h"
 
-#include "OpenCL/cl.h"
+#include "CL/cl.h"
 
 struct pipe_screen;
 

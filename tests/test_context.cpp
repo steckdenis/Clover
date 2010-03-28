@@ -1,6 +1,6 @@
 #include "test_context.h"
 
-#include <OpenCL/cl.h>
+#include "CL/cl.h"
 
 START_TEST (test_create_context)
 {

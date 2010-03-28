@@ -1,4 +1,4 @@
-#include <OpenCL/cl.h>
+#include "CL/cl.h"
 
 // Sampler APIs
 cl_sampler

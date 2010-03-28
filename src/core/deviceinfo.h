@@ -1,7 +1,7 @@
 #ifndef DEVICEINFO_H
 #define DEVICEINFO_H
 
-#include "OpenCL/cl.h"
+#include "CL/cl.h"
 
 #include <vector>
 #include <string>

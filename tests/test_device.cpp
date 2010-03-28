@@ -1,6 +1,6 @@
 #include "test_device.h"
 
-#include <OpenCL/cl.h>
+#include "CL/cl.h"
 
 #define CL_DEVICE_TYPE_INVALID 0x30 //i hope it be an invalid device
 

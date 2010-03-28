@@ -1,5 +1,5 @@
-include_directories (${Clover_SOURCE_DIR}/include
-                    ${Clover_SOURCE_DIR}/src
+include_directories (${Coal_SOURCE_DIR}/include
+                    ${Coal_SOURCE_DIR}/src
                     ${LLVM_INCLUDE_DIR}
                     ${GALLIUM_INCLUDE_DIRS}
                     ${CLANG_INCLUDE_DIRS}
@@ -7,7 +7,7 @@ include_directories (${Clover_SOURCE_DIR}/include
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
-set(CLOVER_SRC_FILES
+set(COAL_SRC_FILES
     api/api_command.cpp  api/api_device.cpp
     api/api_event.cpp  api/api_kernel.cpp
     api/api_platform.cpp   api/api_program.cpp
@@ -20,16 +20,16 @@ set(CLOVER_SRC_FILES
     compiler/compiler.cpp
     cpuwinsys/cpuwinsys.c)
 
-add_library(OpenCL SHARED ${CLOVER_SRC_FILES})
+add_library(OpenCL SHARED ${COAL_SRC_FILES})
 
-SET(LIBRARY_OUTPUT_PATH ${Clover_BINARY_DIR}/lib)
+SET(LIBRARY_OUTPUT_PATH ${COAL_BINARY_DIR}/lib)
 
 SET_TARGET_PROPERTIES(OpenCL PROPERTIES
   VERSION ${${PROJECT_NAME}_VERSION}
   SOVERSION ${${PROJECT_NAME}_SOVERSION} )
 #message(STATUS "some project ${${PROJECT_NAME}_VERSION}")
 
-set_source_files_properties( ${CLOVER_SRC_FILES}
+set_source_files_properties( ${COAL_SRC_FILES}
         PROPERTIES COMPILE_FLAGS ${LLVM_COMPILE_FLAGS})
 set_target_properties(OpenCL
                       PROPERTIES LINK_FLAGS ${LLVM_LDFLAGS})

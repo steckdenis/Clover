@@ -1,4 +1,4 @@
-#include <OpenCL/cl.h>
+#include <CL/cl.h>
 
 // Event Object APIs
 cl_int

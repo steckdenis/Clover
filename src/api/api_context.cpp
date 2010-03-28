@@ -1,4 +1,4 @@
-#include <OpenCL/cl.h>
+#include <CL/cl.h>
 
 #include "core/context.h"
 #include "core/device.h"
@@ -7,12 +7,12 @@
 // Context APIs
 
 cl_context
-clCreateContext(cl_context_properties   properties,
-                cl_uint                 num_devices,
-                const cl_device_id *    devices,
-                logging_fn              pfn_notify,
-                void *                  user_data,
-                cl_int *                errcode_ret)
+clCreateContext(const cl_context_properties  *properties,
+                cl_uint                       num_devices,
+                const cl_device_id *          devices,
+                void (*pfn_notify)(const char *, const void *, size_t, void *),
+                void *                        user_data,
+                cl_int *                      errcode_ret)
 {
     cl_context ret_context = NULL;
     cl_device_type type;
@@ -29,9 +29,9 @@ clCreateContext(cl_context_properties   properties,
 }
 
 cl_context
-clCreateContextFromType(cl_context_properties   properties,
+clCreateContextFromType(const cl_context_properties   *properties,
                         cl_device_type          device_type,
-                        logging_fn              pfn_notify,
+                        void (*pfn_notify)(const char *, const void *, size_t, void *) /* pfn_notify */,
                         void *                  user_data,
                         cl_int *                errcode_ret)
 {

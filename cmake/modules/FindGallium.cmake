@@ -1,6 +1,6 @@
 # Detect Gallium
 if (NOT GALLIUM_DIR)
-   message(FATAL_ERROR "Define GALLIUM_DIR to build Clover")
+   message(FATAL_ERROR "Define GALLIUM_DIR to build Coal")
 else (NOT GALLIUM_DIR)
 
 MACRO(FIND_AND_ADD_GALLIUM_LIB _libname_)

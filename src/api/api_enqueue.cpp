@@ -1,4 +1,4 @@
-#include <OpenCL/cl.h>
+#include <CL/cl.h>
 
 // Enqueued Commands APIs
 cl_int

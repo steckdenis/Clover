@@ -1,5 +1,5 @@
-#include "OpenCL/cl.h"
-#include "OpenCL/cl_platform.h"
+#include "CL/cl.h"
+#include "CL/cl_platform.h"
 
 #include "core/device.h"
 

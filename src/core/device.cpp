@@ -1,21 +1,17 @@
 #include "device.h"
 
-#include "OpenCL/cl.h"
-#include "OpenCL/cl_platform.h"
+#include "CL/cl.h"
+#include "CL/cl_platform.h"
 
 #include "pipe/p_screen.h"
 #include "pipe/p_format.h"
 #include "util/u_memory.h"
-
-#include "cpuwinsys/cpuwinsys.h"
-#include "softpipe/sp_winsys.h"
 
 
 Device * Device::create(cl_uint type)
 {
    switch(type) {
    case CL_DEVICE_TYPE_CPU: {
-      struct pipe_winsys *ws = cpu_winsys();
       struct pipe_screen *screen =
          /*softpipe_create_screen(ws);*/ 0;
       return new Device(CL_DEVICE_TYPE_CPU, screen);
@@ -26,9 +22,6 @@ Device * Device::create(cl_uint type)
    case CL_DEVICE_TYPE_ACCELERATOR:
 #ifdef GALLIUM_CELL
     if (!getenv("GALLIUM_NOCELL")) {
-        struct cell_winsys *cws = cell_get_winsys(pixelformat);
-        struct pipe_screen *screen = cell_create_screen(pws);
-
         pipe = cell_create_context(screen, cws);
     }
 #endif

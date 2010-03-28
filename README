@@ -2,7 +2,7 @@ The best way to compile is to use out of src build, like such:
 
 mkdir some/path/build
 cd some/path/build
-cmake -DGALLIUM_DIR=/home/user/projects/mesa -DCLANG_SRC_DIR=/home/user/projects/llvm -DCLANG_BUILD_DIR=/home/user/build/llvm /home/user/projects/clover
+cmake -DGALLIUM_DIR=/home/user/projects/mesa /home/user/projects/clover
 make
 
-That should be it, make sure that GALLIUM_DIR point to top of Mesa checkout and CLANG_SRC_DIR points to the llvm checkout that cointains Clang and CLANG_BUILD_DIR to the llvm build directory that contains Clang files (CLANG_SRC_DIR and CLANG_BUILD_DIR will be the same if you haven't used out of src build for LLVM/Clang)
+That should be it, make sure that GALLIUM_DIR point to top of Mesa checkout. If your Clang is installed to a different location than LLVM, then define CLANG_INCLUDE_DIR and CLANG_LIB_DIR like so: -DCLANG_INCLUDE_DIR=/opt/clang/include -DCLANG_LIB_DIR=/opt/clang/lib
