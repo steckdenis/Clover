@@ -27,7 +27,7 @@ set(COAL_SRC_FILES
 
 add_library(OpenCL SHARED ${COAL_SRC_FILES})
 
-SET(LIBRARY_OUTPUT_PATH ${COAL_BINARY_DIR}/lib)
+SET(LIBRARY_OUTPUT_PATH ${Coal_BINARY_DIR}/lib)
 
 SET_TARGET_PROPERTIES(OpenCL PROPERTIES
   VERSION ${${PROJECT_NAME}_VERSION}
@@ -43,7 +43,7 @@ set_target_properties(OpenCL
 TARGET_LINK_LIBRARIES(OpenCL
         ${CLANG_LIBS}
         ${LLVM_LIBS_CORE}
-        ${GALLIUM_LIBS}
+#        ${GALLIUM_LIBS}
         )
 
 add_subdirectory(tools)

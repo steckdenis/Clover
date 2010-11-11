@@ -1,28 +1,27 @@
-#ifndef COMPILER_H
-#define COMPILER_H
+#ifndef COAL_COMPILER_H
+#define COAL_COMPILER_H
 
-#include <clang/Basic/LangOptions.h>
-#include <clang/Frontend/CompileOptions.h>
+#include <clang/Frontend/CompilerInstance.h>
 
 namespace llvm {
    class Module;
 }
 
-class Compiler
-{
-public:
-   Compiler();
-   ~Compiler();
+namespace Coal {
+   class Compiler
+   {
+   public:
+      Compiler();
+      ~Compiler();
 
-   llvm::Module *compile(const std::string &text);
+      llvm::Module *compile(const std::string &text);
 
-private:
-   void init();
+   private:
+      void init();
 
-private:
-   clang::LangOptions m_langOptions;
-   clang::CompileOptions m_compileOptions;
-   std::string m_targetCpu;
-};
+   private:
+      clang::CompilerInstance m_clang;
+   };
+}
 
 #endif

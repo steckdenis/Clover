@@ -10,7 +10,7 @@ void usage(const char *progName)
 
 int main(int argc, char **argv)
 {
-   Compiler compiler;
+   Coal::Compiler compiler;
 
    if (argc < 2) {
       usage(argv[0]);
