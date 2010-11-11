@@ -8,12 +8,9 @@ void cl_destroy_context( struct pipe_context *context )
     FREE(clcontext);
 }
 
-struct pipe_context *cl_create_context( struct pipe_winsys *winsys )
+struct pipe_context *cl_create_context()
 {
     struct _cl_context *cl_context = CALLOC_STRUCT(_cl_context);
-
-    cl_context->pipe.winsys = winsys;
-    cl_context->pipe.destroy = cl_destroy_context;
 
     return &cl_context->pipe;
 }

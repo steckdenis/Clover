@@ -12,7 +12,7 @@ struct _cl_context {
 void cl_set_current_context( struct _cl_context *ctx);
 struct _cl_context *cl_current_context( void);
 
-struct pipe_context *cl_create_context( struct pipe_winsys *winsys );
+struct pipe_context *cl_create_context();
 
 static INLINE struct _cl_context *
 cl_convert_context( struct pipe_context *pipe )

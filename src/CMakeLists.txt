@@ -17,8 +17,7 @@ set(COAL_SRC_FILES
     api/api_sampler.cpp api/api_gl.cpp
     core/device.cpp
     core/context.cpp
-    compiler/compiler.cpp
-    cpuwinsys/cpuwinsys.c)
+    compiler/compiler.cpp)
 
 add_library(OpenCL SHARED ${COAL_SRC_FILES})
 

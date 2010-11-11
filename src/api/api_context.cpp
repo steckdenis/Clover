@@ -2,7 +2,6 @@
 
 #include "core/context.h"
 #include "core/device.h"
-#include "cpuwinsys/cpuwinsys.h"
 
 // Context APIs
 
@@ -39,8 +38,7 @@ clCreateContextFromType(const cl_context_properties   *properties,
 
     switch (device_type) {
     case CL_DEVICE_TYPE_CPU:
-        context =
-            cl_create_context(cpu_winsys());
+        context = cl_create_context();
 
         break;
     default:
