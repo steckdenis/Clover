@@ -7,14 +7,15 @@
 #include "pipe/p_format.h"
 #include "util/u_memory.h"
 
+using namespace Coal;
 
-Device * Device::create(cl_uint type)
+DeviceId * DeviceId::create(cl_uint type)
 {
    switch(type) {
    case CL_DEVICE_TYPE_CPU: {
       struct pipe_screen *screen =
          /*softpipe_create_screen(ws);*/ 0;
-      return new Device(CL_DEVICE_TYPE_CPU, screen);
+      return new DeviceId(CL_DEVICE_TYPE_CPU, screen);
    }
       break;
    case CL_DEVICE_TYPE_GPU:
@@ -42,10 +43,10 @@ static void stringToParam(const std::string &str,
       *paramValueSizeRet = str.size();
 }
 
-cl_int Device::info(cl_device_info opcode,
-                    size_t paramValueSize,
-                    void * paramValue,
-                    size_t * paramValueSizeRet) const
+cl_int DeviceId::info(cl_device_info opcode,
+                      size_t paramValueSize,
+                      void * paramValue,
+                      size_t * paramValueSizeRet) const
 {
    if (!paramValue)
        return CL_SUCCESS;
@@ -167,13 +168,13 @@ cl_int Device::info(cl_device_info opcode,
    return CL_SUCCESS;
 }
 
-Device::Device(cl_uint type, struct pipe_screen *screen)
+DeviceId::DeviceId(cl_uint type, struct pipe_screen *screen)
    : m_screen(screen)
 {
    fillInfo(type);
 }
 
-void Device::fillInfo(cl_uint type)
+void DeviceId::fillInfo(cl_uint type)
 {
    m_info.type = type;
    m_info.vendorId = 0;//should be a PCIe ID

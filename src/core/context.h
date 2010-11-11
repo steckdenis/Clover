@@ -4,20 +4,25 @@
 #include "CL/cl.h"
 #include "pipe/p_context.h"
 
-struct _cl_context {
-    struct pipe_context pipe;
-    cl_uint id;
-};
+namespace Coal {
 
-void cl_set_current_context( struct _cl_context *ctx);
-struct _cl_context *cl_current_context( void);
+    class Context {
+    public:
+        Context();
+        ~Context();
 
-struct pipe_context *cl_create_context();
+        bool ref();
+        bool deref();
 
-static INLINE struct _cl_context *
-cl_convert_context( struct pipe_context *pipe )
-{
-    return (struct _cl_context *)pipe;
+    private:
+        struct pipe_context pipe;
+        cl_uint id;
+    };
+
 }
+
+struct _cl_context : public Coal::Context
+{
+};
 
 #endif

@@ -1,16 +1,22 @@
 #include "context.h"
 #include "util/u_memory.h"
 
-void cl_destroy_context( struct pipe_context *context )
-{
-    struct _cl_context *clcontext = cl_convert_context(context);
+using namespace Coal;
 
-    FREE(clcontext);
+Context::Context()
+{
 }
 
-struct pipe_context *cl_create_context()
+Context::~Context()
 {
-    struct _cl_context *cl_context = CALLOC_STRUCT(_cl_context);
+}
 
-    return &cl_context->pipe;
+bool Context::ref()
+{
+    return true;
+}
+
+bool Context::deref()
+{
+    return true;
 }

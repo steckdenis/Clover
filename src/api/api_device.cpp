@@ -48,10 +48,10 @@ create_cpu_device(cl_device_id *   devices,
                   cl_uint *        num_devices,
                   cl_uint          num_entries)
 {
-   Device *device = Device::create(CL_DEVICE_TYPE_CPU);
+    Coal::DeviceId *device = Coal::DeviceId::create(CL_DEVICE_TYPE_CPU);
 
-   devices[0] = (cl_device_id)device;
-   *num_devices = 1;
+    devices[0] = (cl_device_id)device;
+    *num_devices = 1;
 }
 
 static void
