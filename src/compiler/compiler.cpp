@@ -37,9 +37,48 @@ Compiler::~Compiler()
 
 }
 
-void Compiler::init()
+bool Compiler::init()
 {
-#if 0
+   llvm::sys::Path Path = llvm::sys::Path::GetCurrentDirectory();
+   clang::TextDiagnosticPrinter *DiagClient =
+      new TextDiagnosticPrinter(llvm::errs(), DiagnosticOptions());
+
+   clang::Diagnostic Diags(DiagClient);
+   clang::driver::Driver TheDriver(Path.str(), llvm::sys::getHostTriple(),
+                    "a.out", /*IsProduction=*/false, /*CXXIsProduction=*/false,
+                    Diags);
+   TheDriver.setTitle("clang interpreter");
+
+   // FIXME: This is a hack to try to force the driver to do something we can
+   // recognize. We need to extend the driver library to support this use model
+   // (basically, exactly one input, and the operation mode is hard wired).
+
+   llvm::SmallVector<const char *, 16> Args;
+   Args.push_back("-fsyntax-only");
+   llvm::OwningPtr<clang::driver::Compilation> C(TheDriver.BuildCompilation(Args.size(),
+                                                                    Args.data()));
+   if (!C)
+      return false;
+
+   // FIXME: This is copied from ASTUnit.cpp; simplify and eliminate.
+
+   // We expect to get back exactly one command job, if we didn't something
+   // failed. Extract that job from the compilation.
+   const driver::JobList &Jobs = C->getJobs();
+   if (Jobs.size() != 1 || !isa<driver::Command>(Jobs.begin())) {
+      llvm::SmallString<256> Msg;
+      llvm::raw_svector_ostream OS(Msg);
+      C->PrintJob(OS, C->getJobs(), "; ", true);
+      Diags.Report(diag::err_fe_expected_compiler_job) << OS.str();
+      return false;
+   }
+
+   const driver::Command *Cmd = cast<driver::Command>(*Jobs.begin());
+   if (llvm::StringRef(Cmd->getCreator().getName()) != "clang") {
+      Diags.Report(diag::err_fe_expected_clang_command);
+      return false;
+   }
+
    // Initialize a compiler invocation object from the clang (-cc1) arguments.
    const driver::ArgStringList &CCArgs = Cmd->getArguments();
    llvm::OwningPtr<CompilerInvocation> CI(new CompilerInvocation);
@@ -59,22 +98,23 @@ void Compiler::init()
    // FIXME: This is copied from cc1_main.cpp; simplify and eliminate.
 
    // Create a compiler instance to handle the actual work.
-   CompilerInstance Clang;
-   Clang.setLLVMContext(new llvm::LLVMContext);
-   Clang.setInvocation(CI.take());
+   m_clang.setLLVMContext(new llvm::LLVMContext);
+   m_clang.setInvocation(CI.take());
 
    // Create the compilers actual diagnostics engine.
-   Clang.createDiagnostics(int(CCArgs.size()),const_cast<char**>(
-                              CCArgs.data()));
-   if (!Clang.hasDiagnostics())
-      return 1;
+   m_clang.createDiagnostics(int(CCArgs.size()),const_cast<char**>(
+                                CCArgs.data()));
+   if (!m_clang.hasDiagnostics())
+      return false;
 
    // Infer the builtin include path if unspecified.
-   if (Clang.getHeaderSearchOpts().UseBuiltinIncludes &&
-       Clang.getHeaderSearchOpts().ResourceDir.empty())
-      Clang.getHeaderSearchOpts().ResourceDir =
-         CompilerInvocation::GetResourcesPath(argv[0], MainAddr);
-#endif
+   if (m_clang.getHeaderSearchOpts().UseBuiltinIncludes &&
+       m_clang.getHeaderSearchOpts().ResourceDir.empty()) {
+      assert(0);
+      //m_clang.getHeaderSearchOpts().ResourceDir =
+      //   CompilerInvocation::GetResourcesPath(argv[0], MainAddr);
+   }
+   return true;
 }
 
 llvm::Module * Compiler::compile(const std::string &text)

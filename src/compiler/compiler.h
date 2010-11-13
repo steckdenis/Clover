@@ -17,7 +17,7 @@ namespace Coal {
       llvm::Module *compile(const std::string &text);
 
    private:
-      void init();
+      bool init();
 
    private:
       clang::CompilerInstance m_clang;
