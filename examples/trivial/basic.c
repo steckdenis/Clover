@@ -4,13 +4,22 @@
 int main()
 {
    cl_device_id   	device;
+   cl_platform_id       platform;
    int err;
    char deviceName[128],
       deviceVendor[128],
       deviceVersion[128];
 
-   err = clGetDeviceIDs(CL_DEVICE_TYPE_DEFAULT, 1, &device, NULL);
+   err = clGetPlatformIDs(1, &platform, NULL);
+   if (err) {
+      fprintf(stderr, "clGetPlatformIDs failed\n");
+      return -1;
+   }
 
+
+   err = clGetDeviceIDs(platform,
+                        CL_DEVICE_TYPE_DEFAULT,
+                        1, &device, NULL);
    if (err) {
       fprintf(stderr, "clGetDeviceIDs failed\n");
       return -1;
