@@ -39,26 +39,32 @@ Compiler::~Compiler()
 
 bool Compiler::init()
 {
-   llvm::sys::Path Path = llvm::sys::Path::GetCurrentDirectory();
+}
+
+llvm::Module * Compiler::compile(const std::string &text)
+{
    clang::TextDiagnosticPrinter *DiagClient =
-      new TextDiagnosticPrinter(llvm::errs(), DiagnosticOptions());
+      new clang::TextDiagnosticPrinter(llvm::errs(), DiagnosticOptions());
 
    clang::Diagnostic Diags(DiagClient);
-   clang::driver::Driver TheDriver(Path.str(), llvm::sys::getHostTriple(),
-                    "a.out", /*IsProduction=*/false, /*CXXIsProduction=*/false,
-                    Diags);
-   TheDriver.setTitle("clang interpreter");
+   clang::driver::Driver TheDriver(
+      "clc", llvm::sys::getHostTriple(),
+      "a.out", /*IsProduction=*/false, /*CXXIsProduction=*/false,
+      Diags);
+   TheDriver.setTitle("OpenCL Interpreter");
 
    // FIXME: This is a hack to try to force the driver to do something we can
    // recognize. We need to extend the driver library to support this use model
    // (basically, exactly one input, and the operation mode is hard wired).
-
-   llvm::SmallVector<const char *, 16> Args;
-   Args.push_back("-fsyntax-only");
-   llvm::OwningPtr<clang::driver::Compilation> C(TheDriver.BuildCompilation(Args.size(),
-                                                                    Args.data()));
+   llvm::SmallVector<const char *, 16> Args(4);
+   Args[0] = "clc";
+   Args[1] = "-fsyntax-only";
+   Args[2] = "-v";
+   Args[3] = "/home/zack/main.c";
+   llvm::OwningPtr<clang::driver::Compilation> C(
+      TheDriver.BuildCompilation(Args.size(), Args.data()));
    if (!C)
-      return false;
+      return 0;
 
    // FIXME: This is copied from ASTUnit.cpp; simplify and eliminate.
 
@@ -70,13 +76,13 @@ bool Compiler::init()
       llvm::raw_svector_ostream OS(Msg);
       C->PrintJob(OS, C->getJobs(), "; ", true);
       Diags.Report(diag::err_fe_expected_compiler_job) << OS.str();
-      return false;
+      return 0;
    }
 
    const driver::Command *Cmd = cast<driver::Command>(*Jobs.begin());
    if (llvm::StringRef(Cmd->getCreator().getName()) != "clang") {
       Diags.Report(diag::err_fe_expected_clang_command);
-      return false;
+      return 0;
    }
 
    // Initialize a compiler invocation object from the clang (-cc1) arguments.
@@ -98,31 +104,27 @@ bool Compiler::init()
    // FIXME: This is copied from cc1_main.cpp; simplify and eliminate.
 
    // Create a compiler instance to handle the actual work.
-   m_clang.setLLVMContext(new llvm::LLVMContext);
-   m_clang.setInvocation(CI.take());
+   CompilerInstance Clang;
+   Clang.setLLVMContext(new llvm::LLVMContext);
+   Clang.setInvocation(CI.take());
 
    // Create the compilers actual diagnostics engine.
-   m_clang.createDiagnostics(int(CCArgs.size()),const_cast<char**>(
-                                CCArgs.data()));
-   if (!m_clang.hasDiagnostics())
-      return false;
-
-   // Infer the builtin include path if unspecified.
-   if (m_clang.getHeaderSearchOpts().UseBuiltinIncludes &&
-       m_clang.getHeaderSearchOpts().ResourceDir.empty()) {
-      assert(0);
-      //m_clang.getHeaderSearchOpts().ResourceDir =
-      //   CompilerInvocation::GetResourcesPath(argv[0], MainAddr);
-   }
-   return true;
-}
-
-llvm::Module * Compiler::compile(const std::string &text)
-{
-   // Create and execute the frontend to generate an LLVM bitcode module.
-   llvm::OwningPtr<CodeGenAction> act(new EmitLLVMOnlyAction());
-   if (!m_clang.ExecuteAction(*act))
+   Clang.createDiagnostics(int(CCArgs.size()),const_cast<char**>(CCArgs.data()));
+   if (!Clang.hasDiagnostics())
       return 0;
 
-   return act->takeModule();
+   // Infer the builtin include path if unspecified.
+   if (Clang.getHeaderSearchOpts().UseBuiltinIncludes &&
+       Clang.getHeaderSearchOpts().ResourceDir.empty()) {
+      assert(0);
+      //Clang.getHeaderSearchOpts().ResourceDir =
+      //   CompilerInvocation::GetResourcesPath(argv[0], MainAddr);
+   }
+
+   // Create and execute the frontend to generate an LLVM bitcode module.
+   llvm::OwningPtr<CodeGenAction> Act(new EmitLLVMOnlyAction());
+   if (!Clang.ExecuteAction(*Act))
+      return 0;
+
+   return Act->takeModule();
 }
