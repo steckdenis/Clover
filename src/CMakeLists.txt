@@ -25,6 +25,9 @@ set(COAL_SRC_FILES
     core/sampler.cpp
     compiler/compiler.cpp)
 
+configure_file(builtins/coal-internal.h.in
+              ${CMAKE_CURRENT_BINARY_DIR}/builtins/coal-internal.h )
+
 add_library(OpenCL SHARED ${COAL_SRC_FILES})
 
 SET(LIBRARY_OUTPUT_PATH ${Coal_BINARY_DIR}/lib)
@@ -36,6 +39,7 @@ SET_TARGET_PROPERTIES(OpenCL PROPERTIES
 
 set_source_files_properties( ${COAL_SRC_FILES}
         PROPERTIES COMPILE_FLAGS ${LLVM_COMPILE_FLAGS})
+
 set_target_properties(OpenCL
                       PROPERTIES LINK_FLAGS ${LLVM_LDFLAGS})
 
@@ -45,5 +49,7 @@ TARGET_LINK_LIBRARIES(OpenCL
         ${LLVM_LIBS_CORE}
 #        ${GALLIUM_LIBS}
         )
+
+install( FILES ${CMAKE_CURRENT_BINARY_DIR}/src/builtins/coal-internal.h  DESTINATION  ${INCLUDE_INSTALL_DIR}/coal)
 
 add_subdirectory(tools)

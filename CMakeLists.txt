@@ -19,6 +19,12 @@ Find_Package(Gallium REQUIRED)
 Find_Package(LLVM REQUIRED)
 Find_Package(Clang REQUIRED)
 
+ADD_DEFINITIONS("-DCOAL_BUILD_DIR=\"${CMAKE_BINARY_DIR}\"")
+ADD_DEFINITIONS("-DCOAL_INSTALL_DIR=\"${CMAKE_INSTALL_PREFIX}\"")
+
+SET (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH
+    "The directory the headers are installed in")
+
 add_subdirectory(src)
 add_subdirectory(examples)
 
