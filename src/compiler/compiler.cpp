@@ -24,33 +24,6 @@
 using namespace Coal;
 using namespace clang;
 
-
-static void
-setupHeaderSearchOpts(HeaderSearchOptions &opts)
-{
-   opts.Verbose = true;
-   opts.UseBuiltinIncludes = false;
-   opts.UseStandardIncludes = false;
-   opts.UseStandardCXXIncludes = false;
-
-   std::string buildPath(COAL_BUILD_DIR);
-   buildPath += "src/builtin";
-   opts.AddPath(buildPath,
-                frontend::Angled, true,
-                /*IsFramework=*/ false, true);
-   std::string installPath(COAL_INSTALL_DIR);
-   installPath += "include/coal";
-   opts.AddPath(installPath,
-                frontend::Angled, true,
-                /*IsFramework=*/ false, true);
-}
-
-static void
-setupPreprocessorOpts(PreprocessorOptions &opts)
-{
-   opts.Includes.push_back("coal-internal.h");
-}
-
 static void
 setupCodeGenOpts(CodeGenOptions &opts)
 {
@@ -78,10 +51,48 @@ static void
 setupFrontendOpts(FrontendOptions &opts)
 {
    opts.ProgramAction = frontend::EmitLLVMOnly;
-   opts.ShowVersion = true;
    opts.DisableFree = true;
    opts.Inputs.push_back(
       std::make_pair(IK_OpenCL, "-"));
+}
+
+static void
+setupHeaderSearchOpts(HeaderSearchOptions &opts)
+{
+   opts.Verbose = true;
+   opts.UseBuiltinIncludes = false;
+   opts.UseStandardIncludes = false;
+   opts.UseStandardCXXIncludes = false;
+
+   std::string buildPath(COAL_BUILD_DIR);
+   buildPath += "/src/builtins";
+   opts.AddPath(buildPath,
+                frontend::Angled, true,
+                /*IsFramework=*/ false, true);
+   std::string installPath(COAL_INSTALL_DIR);
+   installPath += "/include/coal";
+   opts.AddPath(installPath,
+                frontend::Angled, true,
+                /*IsFramework=*/ false, true);
+}
+
+static void
+setupLangOpts(LangOptions &opts)
+{
+   opts.NoBuiltin = true;
+}
+
+static void
+setupPreprocessorOpts(PreprocessorOptions &opts)
+{
+   opts.Includes.push_back("coal-internal.h");
+}
+
+static void
+setupTargetOpts(TargetOptions &opts)
+{
+   opts.Triple = llvm::sys::getHostTriple();
+   //opts.CPU =
 }
 
 
@@ -109,6 +120,8 @@ bool Compiler::init()
    setupCodeGenOpts(m_clang.getCodeGenOpts());
    setupDiagnosticOpts(m_clang.getDiagnosticOpts());
    setupFrontendOpts(m_clang.getFrontendOpts());
+   setupLangOpts(m_clang.getLangOpts());
+   setupTargetOpts(m_clang.getTargetOpts());
 }
 
 llvm::Module * Compiler::compile(const std::string &text)
