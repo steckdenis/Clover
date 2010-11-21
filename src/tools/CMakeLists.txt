@@ -16,5 +16,8 @@ set_source_files_properties( ${COMPILER_SRC_FILES}
 
 add_executable(clcompiler ${COMPILER_SRC_FILES} ${Coal_SOURCE_DIR}/src/compiler)
 
+set_target_properties(clcompiler
+                      PROPERTIES LINK_FLAGS ${LLVM_LDFLAGS})
+
 target_link_libraries(clcompiler OpenCL ${CLANG_LIBS}
                              ${LLVM_LIBS_CORE})
