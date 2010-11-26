@@ -18,9 +18,13 @@ namespace Coal {
 
    private:
       bool init();
+      void prepareInput(const std::string &text);
 
    private:
       clang::CompilerInstance m_clang;
+
+      // XXX HACK
+      std::string m_tempFileLocation;
    };
 }
 

@@ -21,6 +21,9 @@
 #include <llvm/System/Path.h>
 #include <llvm/Target/TargetSelect.h>
 
+#include <iostream>
+#include <fstream>
+
 using namespace Coal;
 using namespace clang;
 
@@ -30,6 +33,7 @@ setupCodeGenOpts(CodeGenOptions &opts)
    opts.DebugInfo = true;
    //opts.OptimizationLevel = 2;
    //opts.MainFileName = "main.cl";
+   //opts.UnrollLoops = true;
    opts.AsmVerbose = true;
 }
 
@@ -48,12 +52,16 @@ setupDiagnosticOpts(DiagnosticOptions &opts)
 }
 
 static void
-setupFrontendOpts(FrontendOptions &opts)
+setupFrontendOpts(FrontendOptions &opts, const std::string &fileLoc)
 {
    opts.ProgramAction = frontend::EmitLLVMOnly;
    opts.DisableFree = true;
+
+   /* XXX HACK
+    * just matches whatever garbage Compiler::prepareInput
+    * creates */
    opts.Inputs.push_back(
-      std::make_pair(IK_OpenCL, "-"));
+      std::make_pair(IK_OpenCL, fileLoc));
 }
 
 static void
@@ -108,6 +116,9 @@ Compiler::~Compiler()
 
 bool Compiler::init()
 {
+   std::string tempDir = llvm::sys::Path::GetTemporaryDirectory().str();
+   m_tempFileLocation = tempDir + "/main.cl";
+
    m_clang.setLLVMContext(new llvm::LLVMContext);
 
    // Create the compilers actual diagnostics engine.
@@ -119,17 +130,40 @@ bool Compiler::init()
    setupPreprocessorOpts(m_clang.getPreprocessorOpts());
    setupCodeGenOpts(m_clang.getCodeGenOpts());
    setupDiagnosticOpts(m_clang.getDiagnosticOpts());
-   setupFrontendOpts(m_clang.getFrontendOpts());
+   setupFrontendOpts(m_clang.getFrontendOpts(), m_tempFileLocation);
    setupLangOpts(m_clang.getLangOpts());
    setupTargetOpts(m_clang.getTargetOpts());
 }
 
 llvm::Module * Compiler::compile(const std::string &text)
 {
+   llvm::Module *module;
+   /* setup the input file */
+   prepareInput(text);
+
    // Create and execute the frontend to generate an LLVM bitcode module.
    llvm::OwningPtr<CodeGenAction> act(new EmitLLVMOnlyAction());
    if (!m_clang.ExecuteAction(*act))
       return 0;
 
-   return act->takeModule();
+   module = act->takeModule();
+   module->dump();
+   return module;
+}
+
+
+/** XXX
+ *  this needs to go. it's a nasty, nasty hack.
+ *  It's also a serious security threat!
+ */
+void Compiler::prepareInput(const std::string &text)
+{
+   std::string error;
+
+   std::cerr << "Output path = " << m_tempFileLocation.c_str();
+   std::cerr << "Prepare input = "<<text << std::endl;
+
+   std::fstream stream(m_tempFileLocation.c_str(), std::ios::out | std::ios::trunc);
+   stream << text;
+   stream.close();
 }
