@@ -147,7 +147,7 @@ llvm::Module * Compiler::compile(const std::string &text)
       return 0;
 
    module = act->takeModule();
-   module->dump();
+   //module->dump();
    return module;
 }
 
