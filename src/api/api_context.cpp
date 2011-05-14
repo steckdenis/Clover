@@ -1,7 +1,5 @@
 #include <CL/cl.h>
-
-#include "core/context.h"
-#include "core/device.h"
+#include <core/context.h>
 
 // Context APIs
 

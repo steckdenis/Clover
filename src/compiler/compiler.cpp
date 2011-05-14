@@ -17,8 +17,8 @@
 #include <llvm/ExecutionEngine/ExecutionEngine.h>
 #include <llvm/Support/ManagedStatic.h>
 #include <llvm/Support/raw_ostream.h>
-#include <llvm/System/Host.h>
-#include <llvm/System/Path.h>
+#include <llvm/Support/Host.h>
+#include <llvm/Support/Path.h>
 #include <llvm/Target/TargetSelect.h>
 
 #include <iostream>
@@ -119,8 +119,6 @@ bool Compiler::init()
    std::string tempDir = llvm::sys::Path::GetTemporaryDirectory().str();
    m_tempFileLocation = tempDir + "/main.cl";
 
-   m_clang.setLLVMContext(new llvm::LLVMContext);
-
    // Create the compilers actual diagnostics engine.
    m_clang.createDiagnostics(0 ,NULL);
    if (!m_clang.hasDiagnostics())
@@ -142,7 +140,7 @@ llvm::Module * Compiler::compile(const std::string &text)
    prepareInput(text);
 
    // Create and execute the frontend to generate an LLVM bitcode module.
-   llvm::OwningPtr<CodeGenAction> act(new EmitLLVMOnlyAction());
+   llvm::OwningPtr<CodeGenAction> act(new EmitLLVMOnlyAction(new llvm::LLVMContext));
    if (!m_clang.ExecuteAction(*act))
       return 0;
 

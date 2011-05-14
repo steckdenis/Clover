@@ -3,9 +3,7 @@
 #include "CL/cl.h"
 #include "CL/cl_platform.h"
 
-#include "pipe/p_screen.h"
-#include "pipe/p_format.h"
-#include "util/u_memory.h"
+#include <string.h>
 
 using namespace Coal;
 
@@ -21,11 +19,6 @@ DeviceId * DeviceId::create(cl_uint type)
    case CL_DEVICE_TYPE_GPU:
       break;
    case CL_DEVICE_TYPE_ACCELERATOR:
-#ifdef GALLIUM_CELL
-    if (!getenv("GALLIUM_NOCELL")) {
-        pipe = cell_create_context(screen, cws);
-    }
-#endif
       break;
    }
    return 0;

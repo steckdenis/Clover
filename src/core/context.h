@@ -2,7 +2,6 @@
 #define CONTEXT_H
 
 #include "CL/cl.h"
-#include "pipe/p_context.h"
 
 namespace Coal {
 
@@ -15,7 +14,6 @@ namespace Coal {
         bool deref();
 
     private:
-        struct pipe_context pipe;
         cl_uint id;
     };
 

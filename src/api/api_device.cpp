@@ -3,10 +3,6 @@
 
 #include "core/device.h"
 
-#include "pipe/p_screen.h"
-#include "pipe/p_format.h"
-#include "util/u_memory.h"
-
 #include <string>
 
 // Device APIs
