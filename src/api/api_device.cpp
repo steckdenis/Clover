@@ -67,11 +67,11 @@ clGetDeviceIDs(cl_platform_id   platform,
     cl_bool gpu, cpu, accelerator;
     cl_uint original_num_entries = num_entries;
 
-    gpu = (device_type & CL_DEVICE_TYPE_DEFAULT) ||
-          (device_type & CL_DEVICE_TYPE_GPU) ||
+    gpu = (device_type & CL_DEVICE_TYPE_GPU) ||
           !(device_type ^ CL_DEVICE_TYPE_ALL);
 
-    cpu = (device_type & CL_DEVICE_TYPE_CPU) ||
+    cpu = (device_type & CL_DEVICE_TYPE_DEFAULT) ||
+          (device_type & CL_DEVICE_TYPE_CPU) ||
           !(device_type ^ CL_DEVICE_TYPE_ALL);
 
     accelerator = (device_type & CL_DEVICE_TYPE_ACCELERATOR) ||
