@@ -1,22 +1,7 @@
-#include "test_device.h"
-#include "test_context.h"
+#include "test_platform.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-
-static Suite *device_suite(void)
-{
-    Suite *s = suite_create("device");
-    suite_add_tcase(s, cl_device_tcase_create());
-    return s;
-}
-
-static Suite *context_suite(void)
-{
-    Suite *s = suite_create("context");
-    suite_add_tcase(s, cl_context_tcase_create());
-    return s;
-}
 
 int main(int argc, char **argv)
 {
@@ -27,13 +12,17 @@ int main(int argc, char **argv)
         printf("there is not enough arguments");
         return EXIT_FAILURE;
     }
+    
+#define TESTSUITE(name, string)                         \
+    if (!strcmp(string, argv[1])) {                     \
+        s = suite_create(string);                       \
+        suite_add_tcase(s, cl_##name##_tcase_create()); \
+    }
+    
+    TESTSUITE(platform, "platform");
 
-    if (!strcmp("device",argv[1])) {
-        s = device_suite();
-    } else if (!strcmp("context", argv[1])){
-        s = context_suite();
-    } else {
-        printf("test case does not exist");
+    if (s == NULL) {
+        printf("test case %s does not exist", argv[1]);
         return EXIT_FAILURE;
     }
 

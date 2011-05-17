@@ -8,13 +8,19 @@ include_directories (${Coal_SOURCE_DIR}/include
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
 set(COAL_SRC_FILES
-    api/api_command.cpp  api/api_device.cpp
-    api/api_event.cpp  api/api_kernel.cpp
-    api/api_platform.cpp   api/api_program.cpp
+    api/api_command.cpp
+    api/api_device.cpp
+    api/api_event.cpp
+    api/api_kernel.cpp
+    api/api_platform.cpp
+    api/api_program.cpp
     api/api_context.cpp
-    api/api_enqueue.cpp  api/api_flush.cpp
-    api/api_memory.cpp  api/api_profiling.cpp
-    api/api_sampler.cpp api/api_gl.cpp
+    api/api_enqueue.cpp
+    api/api_flush.cpp
+    api/api_memory.cpp
+    api/api_profiling.cpp
+    api/api_sampler.cpp
+    api/api_gl.cpp
 )
 
 configure_file(builtins/coal-internal.h.in
