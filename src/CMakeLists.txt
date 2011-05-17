@@ -15,15 +15,7 @@ set(COAL_SRC_FILES
     api/api_enqueue.cpp  api/api_flush.cpp
     api/api_memory.cpp  api/api_profiling.cpp
     api/api_sampler.cpp api/api_gl.cpp
-    core/context.cpp
-    core/device.cpp
-    core/event.cpp
-    core/kernel.cpp
-    core/mem.cpp
-    core/platformid.cpp
-    core/program.cpp
-    core/sampler.cpp
-    compiler/compiler.cpp)
+)
 
 configure_file(builtins/coal-internal.h.in
               ${CMAKE_CURRENT_BINARY_DIR}/builtins/coal-internal.h )
@@ -53,4 +45,4 @@ TARGET_LINK_LIBRARIES(OpenCL
 
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/src/builtins/coal-internal.h  DESTINATION  ${INCLUDE_INSTALL_DIR}/coal)
 
-add_subdirectory(tools)
+#add_subdirectory(tools)
