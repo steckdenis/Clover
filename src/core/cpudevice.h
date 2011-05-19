@@ -6,7 +6,7 @@
 namespace Coal
 {
 
-class CPUDevice
+class CPUDevice : public DeviceInterface
 {
     public:
         CPUDevice();

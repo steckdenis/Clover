@@ -1,6 +1,8 @@
 #include "test_device.h"
 #include "CL/cl.h"
 
+#include <string.h>
+
 START_TEST (test_get_device_ids)
 {
     cl_platform_id platform = 0;
@@ -46,10 +48,69 @@ START_TEST (test_get_device_ids)
 }
 END_TEST
 
+START_TEST (test_get_device_info)
+{
+    cl_platform_id platform = 0;
+    cl_device_id device;
+    cl_uint num_devices;
+    cl_int result;
+    
+    size_t size_ret;
+    char value[500];
+    
+    result = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &device, &num_devices);
+    fail_if(
+        result != CL_SUCCESS,
+        "unable to get a CPU device"
+    );
+    
+    result = clGetDeviceInfo(0, CL_DEVICE_TYPE, 500, value, &size_ret);
+    fail_if(
+        result != CL_INVALID_DEVICE,
+        "0 is not a valid device"
+    );
+    
+    result = clGetDeviceInfo(device, 13376334, 500, value, &size_ret);
+    fail_if(
+        result != CL_INVALID_VALUE,
+        "13376334 is not a valid param_name"
+    );
+    
+    result = clGetDeviceInfo(device, CL_DEVICE_TYPE, 1, value, &size_ret);
+    fail_if(
+        result != CL_INVALID_VALUE,
+        "1 is too small to contain a cl_device_type"
+    );
+    
+    result = clGetDeviceInfo(device, CL_DEVICE_TYPE, 0, 0, &size_ret);
+    fail_if(
+        result != CL_SUCCESS || size_ret != sizeof(cl_device_type),
+        "we have to succeed and to say that the result is a cl_device_type"
+    );
+    
+    result = clGetDeviceInfo(device, CL_DEVICE_TYPE, 500, value, &size_ret);
+    fail_if(
+        result != CL_SUCCESS || *(cl_device_type*)(value) != CL_DEVICE_TYPE_CPU,
+        "we have to say the device is a CPU"
+    );
+    
+    result = clGetDeviceInfo(device, CL_DEVICE_VENDOR, 500, value, &size_ret);
+    fail_if(
+        result != CL_SUCCESS,
+        "we must succeed"
+    );
+    fail_if(
+        strncmp(value, "Mesa", size_ret) != 0,
+        "the device vendor must be \"Mesa\""
+    );
+}
+END_TEST
+
 TCase *cl_device_tcase_create(void)
 {
     TCase *tc = NULL;
     tc = tcase_create("device");
     tcase_add_test(tc, test_get_device_ids);
+    tcase_add_test(tc, test_get_device_info);
     return tc;
 }

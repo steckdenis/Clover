@@ -35,10 +35,16 @@ clGetDeviceIDs(cl_platform_id   platform,
 
 cl_int
 clGetDeviceInfo(cl_device_id    device,
-                cl_device_info  opcode,
+                cl_device_info  param_name,
                 size_t          param_value_size,
                 void *          param_value,
                 size_t *        param_value_size_ret)
 {
-   return 0;
+    if (device == 0)
+        // NOTE: Check that device is really a pointer to a DeviceInterface ?
+        return CL_INVALID_DEVICE;
+    
+    Coal::DeviceInterface *iface = (Coal::DeviceInterface *)device;
+    return iface->info(param_name, param_value_size, param_value, 
+                       param_value_size_ret);
 }
