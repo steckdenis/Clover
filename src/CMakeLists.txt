@@ -21,6 +21,8 @@ set(COAL_SRC_FILES
     api/api_profiling.cpp
     api/api_sampler.cpp
     api/api_gl.cpp
+    
+    core/cpudevice.cpp
 )
 
 configure_file(builtins/coal-internal.h.in
