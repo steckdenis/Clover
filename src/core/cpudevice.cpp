@@ -33,7 +33,6 @@ cl_int CPUDevice::info(cl_device_info param_name,
         cl_device_exec_capabilities cl_device_exec_capabilities_var;
         cl_command_queue_properties cl_command_queue_properties_var;
         cl_platform_id cl_platform_id_var;
-        const char *string_var;
         size_t three_size_t[3];
     };
     
