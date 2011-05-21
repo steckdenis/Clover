@@ -1,5 +1,6 @@
 #include "test_platform.h"
 #include "test_device.h"
+#include "test_context.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,6 +23,7 @@ int main(int argc, char **argv)
     
     TESTSUITE(platform, "platform");
     TESTSUITE(device, "device");
+    TESTSUITE(context, "context");
 
     if (s == NULL) {
         printf("test case %s does not exist", argv[1]);

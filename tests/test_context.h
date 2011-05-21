@@ -1,5 +1,5 @@
-#ifndef __UTEST_PLATFORM__
-#define __UTEST_PLATFORM__
+#ifndef __UTEST_CONTEXT__
+#define __UTEST_CONTEXT__
 
 #include <check.h>
 
@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-TCase *cl_platform_tcase_create(void);
+TCase *cl_context_tcase_create(void);
 
 #ifdef __cplusplus
 }

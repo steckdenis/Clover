@@ -23,6 +23,7 @@ set(COAL_SRC_FILES
     api/api_gl.cpp
     
     core/cpudevice.cpp
+    core/context.cpp
 )
 
 configure_file(builtins/coal-internal.h.in

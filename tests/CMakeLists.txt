@@ -5,6 +5,7 @@ set(OPENCL_TESTS_SOURCE
     tests.c
     test_platform.cpp
     test_device.cpp
+    test_context.cpp
     )
 
 add_executable(tests ${OPENCL_TESTS_SOURCE})
@@ -14,4 +15,6 @@ MACRO(OPENCL_TEST EXECUTABLE_NAME TEST_NAME)
     add_test(${TEST_NAME} ${EXECUTABLE_NAME} ${TEST_NAME})
 ENDMACRO(OPENCL_TEST)
 
-OPENCL_TEST(tests platform device)
+OPENCL_TEST(tests platform)
+OPENCL_TEST(tests device)
+OPENCL_TEST(tests context)

@@ -1,8 +1,6 @@
 #include "test_device.h"
 #include "CL/cl.h"
 
-#include <string.h>
-
 START_TEST (test_get_device_ids)
 {
     cl_platform_id platform = 0;
