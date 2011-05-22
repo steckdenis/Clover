@@ -74,7 +74,6 @@ START_TEST (test_create_context)
     );
     
     ctx = clCreateContext(properties, 1, &device, 0, 0, &result);
-    printf("rs : %i, ctx : %p\n", result, ctx);
     fail_if(
         result != CL_SUCCESS || ctx == 0,
         "unable to create a valid context"
@@ -90,10 +89,24 @@ START_TEST (test_create_context)
 }
 END_TEST
 
+START_TEST (test_create_context_from_type)
+{
+    cl_context ctx;
+    cl_int result;
+    
+    ctx = clCreateContextFromType(0, CL_DEVICE_TYPE_DEFAULT, 0, 0, &result);
+    fail_if(
+        result != CL_SUCCESS || ctx == 0,
+        "unable to create a valid context with a device of type default"
+    );
+}
+END_TEST
+
 TCase *cl_context_tcase_create(void)
 {
     TCase *tc = NULL;
     tc = tcase_create("context");
     tcase_add_test(tc, test_create_context);
+    tcase_add_test(tc, test_create_context_from_type);
     return tc;
 }
