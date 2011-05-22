@@ -21,7 +21,12 @@ class Context
         ~Context();
         
         void reference();
-        bool dereference();     /*!< @return true if reference becomes 0 */ 
+        bool dereference();     /*!< @return true if reference becomes 0 */
+        
+        cl_int info(cl_context_info param_name,
+                    size_t param_value_size,
+                    void *param_value,
+                    size_t *param_value_size_ret);
         
     private:
         cl_context_properties *p_properties;
@@ -30,7 +35,7 @@ class Context
         void *p_user_data;
         
         DeviceInterface **p_devices;
-        unsigned int p_references;
+        unsigned int p_references, p_num_devices, p_props_len;
         cl_platform_id p_platform;
 };
 

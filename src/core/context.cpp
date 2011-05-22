@@ -18,8 +18,8 @@ Context::Context(const cl_context_properties *properties,
                                                 size_t, void *),
                  void *user_data,
                  cl_int *errcode_ret) 
-: p_references(1), p_properties(0), p_pfn_notify(pfn_notify),
-  p_user_data(user_data), p_platform(0), p_devices(0)
+: p_references(1), p_properties(0), p_pfn_notify(pfn_notify), p_props_len(0),
+  p_user_data(user_data), p_platform(0), p_devices(0), p_num_devices(0)
 {
     if (!p_pfn_notify)
         p_pfn_notify = &default_pfn_notify;
@@ -58,6 +58,7 @@ Context::Context(const cl_context_properties *properties,
         // properties may be allocated on the stack of the client application
         // copy it into a real buffer
         p_properties = (cl_context_properties *)malloc(props_len);
+        p_props_len = props_len;
         
         if (!p_properties)
         {
@@ -77,6 +78,7 @@ Context::Context(const cl_context_properties *properties,
     
     // Explore the devices
     p_devices = (DeviceInterface **)malloc(num_devices * sizeof(DeviceInterface *));
+    p_num_devices = num_devices;
     
     if (!p_devices)
     {
@@ -133,4 +135,59 @@ bool Context::dereference()
 {
     p_references--;
     return (p_references == 0);
+}
+
+cl_int Context::info(cl_context_info param_name,
+                     size_t param_value_size,
+                     void *param_value,
+                     size_t *param_value_size_ret)
+{
+    void *value = 0;
+    int value_length = 0;
+    
+    union {
+        cl_uint cl_uint_var;
+    };
+    
+#define SIMPLE_ASSIGN(type, _value) \
+    value_length = sizeof(type);    \
+    type##_var = _value;            \
+    value = & type##_var;
+    
+#define MEM_ASSIGN(size, buf)       \
+    value_length = size;            \
+    value = (void *)buf;
+    
+    switch (param_name)
+    {
+        case CL_CONTEXT_REFERENCE_COUNT:
+            SIMPLE_ASSIGN(cl_uint, p_references);
+            break;
+            
+        case CL_CONTEXT_NUM_DEVICES:
+            SIMPLE_ASSIGN(cl_uint, p_num_devices);
+            break;
+            
+        case CL_CONTEXT_DEVICES:
+            MEM_ASSIGN(p_num_devices * sizeof(DeviceInterface *), p_devices);
+            break;
+            
+        case CL_CONTEXT_PROPERTIES:
+            MEM_ASSIGN(p_props_len, p_properties);
+            break;
+            
+        default:
+            return CL_INVALID_VALUE;
+    }
+    
+    if (param_value && param_value_size < value_length)
+        return CL_INVALID_VALUE;
+    
+    if (param_value_size_ret)
+        *param_value_size_ret = value_length;
+        
+    if (param_value && value_length /* CONTEXT_PROPERTIES can be of length 0 */)
+        memcpy(param_value, value, value_length);
+    
+    return CL_SUCCESS;
 }
