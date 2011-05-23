@@ -7,6 +7,9 @@ include_directories (${Coal_SOURCE_DIR}/include
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
+configure_file(core/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/config.h)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/core/)
+
 set(COAL_SRC_FILES
     api/api_command.cpp
     api/api_device.cpp
