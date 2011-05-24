@@ -1,5 +1,6 @@
 #include "context.h"
 #include "deviceinterface.h"
+#include "propertylist.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -148,15 +149,6 @@ cl_int Context::info(cl_context_info param_name,
     union {
         cl_uint cl_uint_var;
     };
-    
-#define SIMPLE_ASSIGN(type, _value) \
-    value_length = sizeof(type);    \
-    type##_var = _value;            \
-    value = & type##_var;
-    
-#define MEM_ASSIGN(size, buf)       \
-    value_length = size;            \
-    value = (void *)buf;
     
     switch (param_name)
     {

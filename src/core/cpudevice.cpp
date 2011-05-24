@@ -1,5 +1,6 @@
 #include "cpudevice.h"
 #include "config.h"
+#include "propertylist.h"
 
 #include <string.h>
 
@@ -37,18 +38,6 @@ cl_int CPUDevice::info(cl_device_info param_name,
         cl_platform_id cl_platform_id_var;
         size_t three_size_t[3];
     };
-    
-#define SIMPLE_ASSIGN(type, _value) \
-    value_length = sizeof(type);    \
-    type##_var = _value;            \
-    value = & type##_var;
-    
-#define STRING_ASSIGN(string)           \
-{                                       \
-    static const char str[] = string;   \
-    value_length = sizeof(str);         \
-    value = (void *)str;                \
-}
     
     switch (param_name)
     {
