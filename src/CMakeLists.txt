@@ -39,8 +39,8 @@ SET(LIBRARY_OUTPUT_PATH ${Coal_BINARY_DIR}/lib)
 
 SET_TARGET_PROPERTIES(OpenCL PROPERTIES
   VERSION ${${PROJECT_NAME}_VERSION}
-  SOVERSION ${${PROJECT_NAME}_SOVERSION} )
-#message(STATUS "some project ${${PROJECT_NAME}_VERSION}")
+  SOVERSION ${${PROJECT_NAME}_SOVERSION}
+)
 
 set_source_files_properties( ${COAL_SRC_FILES}
         PROPERTIES COMPILE_FLAGS ${LLVM_COMPILE_FLAGS})
@@ -54,8 +54,8 @@ TARGET_LINK_LIBRARIES(OpenCL
         ${CLANG_LIBS}
         ${LLVM_LIBS_CORE}
 #        ${GALLIUM_LIBS}
-        )
+)
 
-install( FILES ${CMAKE_CURRENT_BINARY_DIR}/src/builtins/coal-internal.h  DESTINATION  ${INCLUDE_INSTALL_DIR}/coal)
+install(TARGETS OpenCL LIBRARY DESTINATION /usr/lib)
 
 #add_subdirectory(tools)
