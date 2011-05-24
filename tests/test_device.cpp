@@ -14,10 +14,10 @@ START_TEST (test_get_device_ids)
         "num_entries cannot be NULL when devices is not null"
     );
     
-    result = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 0, 0, &num_devices);
+    result = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 0, 0, 0);
     fail_if(
         result != CL_INVALID_VALUE,
-        "num_entires and devices cannot be NULL at the same time"
+        "num_devices and devices cannot be NULL at the same time"
     );
     
     result = clGetDeviceIDs((cl_platform_id)1337, CL_DEVICE_TYPE_CPU, 1, &device, &num_devices);

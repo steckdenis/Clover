@@ -1,7 +1,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-#cmakedefine LLVM_VERSION
-#cmakedefine Coal_VERSION
+#define LLVM_VERSION "@LLVM_VERSION@"
+#define COAL_VERSION "@Coal_VERSION@"
 
 #endif

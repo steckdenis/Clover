@@ -14,10 +14,10 @@ START_TEST (test_get_platform_ids)
         "num_entries cannot be NULL when *platforms is provided"
     );
     
-    result = clGetPlatformIDs(0, 0, &num_platforms);
+    result = clGetPlatformIDs(0, 0, 0);
     fail_if(
         result != CL_INVALID_VALUE,
-        "Both num_entries and *platforms cannot be NULL at the same time"
+        "Both num_platforms and *platforms cannot be NULL at the same time"
     );
     
     result = clGetPlatformIDs(1, 0, &num_platforms);

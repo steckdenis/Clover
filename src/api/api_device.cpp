@@ -15,7 +15,7 @@ clGetDeviceIDs(cl_platform_id   platform,
     if (num_entries == 0 && devices != 0)
         return CL_INVALID_VALUE;
     
-    if (num_entries == 0 && devices == 0)
+    if (num_devices == 0 && devices == 0)
         return CL_INVALID_VALUE;
     
     // We currently implement only CPU-based acceleration

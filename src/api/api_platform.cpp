@@ -1,11 +1,12 @@
 #include "CL/cl.h"
 #include <string.h>
+#include <config.h>
 
 static const char platform_profile[] = "FULL_PROFILE";
-static const char platform_version[] = "OpenCL 1.1 Clover 0.1";
+static const char platform_version[] = "OpenCL 1.1 MESA " COAL_VERSION;
 static const char platform_name[] = "Default";
 static const char platform_vendor[] = "Mesa";
-static const char platform_extensions[] = "cl_khr_fp64  cl_khr_int64_base_atomics cl_khr_int64_extended_atomics";
+static const char platform_extensions[] = "cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics";
 
 // Platform API
 
@@ -14,9 +15,12 @@ clGetPlatformIDs(cl_uint          num_entries,
                  cl_platform_id * platforms,
                  cl_uint *        num_platforms)
 {
-    *num_platforms = 1;
+    if (num_platforms)
+        *num_platforms = 1;
+    else if (!platforms)
+        return CL_INVALID_VALUE;
     
-    if (num_entries == 0)
+    if (!num_entries && platforms)
         return CL_INVALID_VALUE;
     
     if (platforms != 0)
@@ -65,10 +69,10 @@ clGetPlatformInfo(cl_platform_id   platform,
             string = platform_extensions;
             len = sizeof(platform_extensions);
             break;
+            
+        default:
+            return CL_INVALID_VALUE;
     }
-    
-    if (string == 0)
-        return CL_INVALID_VALUE;
     
     if (param_value_size < len && param_value != 0)
         return CL_INVALID_VALUE;
@@ -76,7 +80,8 @@ clGetPlatformInfo(cl_platform_id   platform,
     if (param_value != 0)
         memcpy(param_value, string, len);
     
-    *param_value_size_ret = len;
+    if (param_value_size_ret)
+        *param_value_size_ret = len;
     
     return CL_SUCCESS;
 }

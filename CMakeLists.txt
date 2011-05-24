@@ -25,7 +25,7 @@ SET (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH
     "The directory the headers are installed in")
 
 add_subdirectory(src)
-#add_subdirectory(examples)
+add_subdirectory(examples)
 
 IF (BUILD_TESTS)
     ENABLE_TESTING()

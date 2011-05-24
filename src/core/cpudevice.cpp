@@ -239,7 +239,7 @@ cl_int CPUDevice::info(cl_device_info param_name,
             break;
         
         case CL_DRIVER_VERSION:
-            STRING_ASSIGN("" Coal_VERSION);
+            STRING_ASSIGN("" COAL_VERSION);
             break;
         
         case CL_DEVICE_PROFILE:
@@ -247,7 +247,7 @@ cl_int CPUDevice::info(cl_device_info param_name,
             break;
         
         case CL_DEVICE_VERSION:
-            STRING_ASSIGN("OpenCL 1.1 Mesa " Coal_VERSION);
+            STRING_ASSIGN("OpenCL 1.1 Mesa " COAL_VERSION);
             break;
         
         case CL_DEVICE_EXTENSIONS:
