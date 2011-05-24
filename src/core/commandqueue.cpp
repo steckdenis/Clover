@@ -11,7 +11,7 @@ CommandQueue::CommandQueue(Context *ctx,
                            DeviceInterface *device,
                            cl_command_queue_properties properties, 
                            cl_int *errcode_ret)
-: p_ctx(ctx), p_device(device), p_properties(properties)
+: p_ctx(ctx), p_device(device), p_properties(properties), p_references(1)
 {
     // Increment the reference count of the context
     // We begin by doing this to be able to unconditionnally release the context

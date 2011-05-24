@@ -1,8 +1,6 @@
 #include "test_context.h"
 #include "CL/cl.h"
 
-#include <stdio.h>
-
 START_TEST (test_create_context)
 {
     cl_platform_id platform = 0;

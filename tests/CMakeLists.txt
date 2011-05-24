@@ -6,6 +6,7 @@ set(OPENCL_TESTS_SOURCE
     test_platform.cpp
     test_device.cpp
     test_context.cpp
+    test_commandqueue.cpp
     )
 
 add_executable(tests ${OPENCL_TESTS_SOURCE})
@@ -18,3 +19,4 @@ ENDMACRO(OPENCL_TEST)
 OPENCL_TEST(tests platform)
 OPENCL_TEST(tests device)
 OPENCL_TEST(tests context)
+OPENCL_TEST(tests commandqueue)

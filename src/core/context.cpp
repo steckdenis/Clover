@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 using namespace Coal;
 
@@ -87,7 +88,7 @@ Context::Context(const cl_context_properties *properties,
         return;
     }
     
-    for (int i = 0; i < num_devices; ++i)
+    for (int i=0; i<num_devices; ++i)
     {
         cl_device_id device = devices[i];
         
@@ -105,7 +106,7 @@ Context::Context(const cl_context_properties *properties,
                                     &device_available,
                                     0);
         
-        if (errcode_ret != CL_SUCCESS)
+        if (*errcode_ret != CL_SUCCESS)
             return;
         
         if (!device_available)
