@@ -3,7 +3,7 @@
 
 #define SIMPLE_ASSIGN(type, _value) do {    \
     value_length = sizeof(type);            \
-    type##_var = _value;                    \
+    type##_var = (type)_value;              \
     value = & type##_var;                   \
 } while (0);
     

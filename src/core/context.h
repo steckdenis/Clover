@@ -28,6 +28,8 @@ class Context
                     void *param_value,
                     size_t *param_value_size_ret);
         
+        bool hasDevice(DeviceInterface *device) const;
+        
     private:
         cl_context_properties *p_properties;
         void (CL_CALLBACK *p_pfn_notify)(const char *, const void *,

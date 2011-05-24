@@ -184,3 +184,12 @@ cl_int Context::info(cl_context_info param_name,
     
     return CL_SUCCESS;
 }
+
+bool Context::hasDevice(DeviceInterface *device) const
+{
+    for (int i=0; i<p_num_devices; ++i)
+        if (p_devices[i] == device)
+            return true;
+        
+    return false;
+}
