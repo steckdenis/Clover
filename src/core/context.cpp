@@ -124,7 +124,8 @@ Context::~Context()
     if (p_properties)
         free((void *)p_properties);
     
-    free((void *)p_devices);
+    if (p_devices)
+        free((void *)p_devices);
 }
 
 void Context::reference()
