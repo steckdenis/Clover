@@ -7,6 +7,7 @@ set(OPENCL_TESTS_SOURCE
     test_device.cpp
     test_context.cpp
     test_commandqueue.cpp
+    test_mem.cpp
     )
 
 add_executable(tests ${OPENCL_TESTS_SOURCE})
@@ -20,3 +21,4 @@ OPENCL_TEST(tests platform)
 OPENCL_TEST(tests device)
 OPENCL_TEST(tests context)
 OPENCL_TEST(tests commandqueue)
+OPENCL_TEST(tests mem)

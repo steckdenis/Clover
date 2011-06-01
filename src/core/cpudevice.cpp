@@ -1,10 +1,16 @@
 #include "cpudevice.h"
+#include "memobject.h"
 #include "config.h"
 #include "propertylist.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 using namespace Coal;
+
+/*
+ * CPUDevice
+ */
 
 CPUDevice::CPUDevice() : DeviceInterface::DeviceInterface()
 {
@@ -321,4 +327,182 @@ cl_int CPUDevice::info(cl_device_info param_name,
         memcpy(param_value, value, value_length);
     
     return CL_SUCCESS;
+}
+
+DeviceBuffer *CPUDevice::createDeviceBuffer(MemObject *buffer, cl_int *rs)
+{
+    return (DeviceBuffer *)new CPUBuffer(this, buffer, rs);
+}
+
+/*
+ * CPUBuffer
+ */
+CPUBuffer::CPUBuffer(CPUDevice *device, MemObject *buffer, cl_int *rs)
+: p_device(device), p_buffer(buffer), p_data(0)
+{
+    if (buffer->type() == MemObject::SubBuffer)
+    {
+        // We need to create this CPUBuffer based on the CPUBuffer of the
+        // parent buffer
+        SubBuffer *subbuf = (SubBuffer *)buffer;
+        MemObject *parent = subbuf->parent();
+        CPUBuffer *parentcpubuf = (CPUBuffer *)parent->deviceBuffer(device);
+        
+        char *tmp_data = (char *)parentcpubuf->data();
+        tmp_data += subbuf->offset();
+        
+        p_data = (void *)tmp_data;
+    }
+    else if (buffer->flags() & CL_MEM_USE_HOST_PTR)
+    {
+        // We use the host ptr, we are already allocated
+        p_data = buffer->host_ptr();
+    }
+}
+
+CPUBuffer::~CPUBuffer()
+{
+    if (p_data && 
+        !(p_buffer->flags() & CL_MEM_USE_HOST_PTR) && 
+        !p_buffer->type() == MemObject::SubBuffer)
+    {
+        free((void *)p_data);
+    }
+}
+
+static size_t pixel_size(cl_image_format format)
+{
+    size_t multiplier;
+    
+    switch (format.image_channel_order)
+    {
+        case CL_R:
+        case CL_Rx:
+        case CL_A:
+        case CL_INTENSITY:
+        case CL_LUMINANCE:
+            multiplier = 1;
+            break;
+         
+        case CL_RG:
+        case CL_RGx:
+        case CL_RA:
+            multiplier = 2;
+            break;
+            
+        case CL_RGB:
+        case CL_RGBx:
+            multiplier = 3;
+            break;
+            
+        case CL_RGBA:
+        case CL_ARGB:
+        case CL_BGRA:
+            multiplier = 4;
+        
+        default:
+            return 0;
+    }
+    
+    switch (format.image_channel_data_type)
+    {
+        case CL_SNORM_INT8:
+        case CL_UNORM_INT8:
+        case CL_SIGNED_INT8:
+        case CL_UNSIGNED_INT8:
+            return multiplier;
+        case CL_SNORM_INT16:
+        case CL_UNORM_INT16:
+        case CL_SIGNED_INT16:
+        case CL_UNSIGNED_INT16:
+            return multiplier * 2;
+        case CL_SIGNED_INT32:
+        case CL_UNSIGNED_INT32:
+            return multiplier * 4;
+        case CL_FLOAT:
+            return multiplier * sizeof(float);
+        case CL_HALF_FLOAT:
+            return multiplier * 2;
+        case CL_UNORM_SHORT_565:
+        case CL_UNORM_SHORT_555:
+            return 2;
+        case CL_UNORM_INT_101010:
+            return 4;
+        default:
+            return 0;
+    }
+}
+
+static size_t buffer_size(MemObject *buffer)
+{
+    switch (buffer->type())
+    {
+        case MemObject::Buffer:
+        {
+            Buffer *buf = (Buffer *)buffer;
+            return buf->size();
+        }
+        case MemObject::SubBuffer:
+        {
+            SubBuffer *buf = (SubBuffer *)buffer;
+            return buf->size();
+        }
+        case MemObject::Image2D:
+        {
+            Image2D *buf = (Image2D *)buffer;
+            
+            if (buf->row_pitch())
+                return buf->height() * buf->row_pitch();
+            else
+                return buf->height() * buf->width() * pixel_size(buf->format());
+        }
+        case MemObject::Image3D:
+        {
+            Image3D *buf = (Image3D *)buffer;
+            
+            if (buf->slice_pitch())
+                return buf->depth() * buf->slice_pitch();
+            else
+                if (buf->row_pitch())
+                    return buf->depth() * buf->height() * buf->row_pitch();
+                else
+                    return buf->depth() * buf->height() * buf->width();
+        }
+    }
+}
+
+void *CPUBuffer::data() const
+{
+    return p_data;
+}
+        
+cl_int CPUBuffer::allocate()
+{
+    size_t buf_size = buffer_size(p_buffer);
+    
+    if (buf_size == 0)
+        // Something went wrong...
+        return CL_MEM_OBJECT_ALLOCATION_FAILURE;
+    
+    if (!p_data)
+    {
+        // We don't use a host ptr, we need to allocate a buffer
+        p_data = malloc(buf_size);
+        
+        if (!p_data)
+            return CL_MEM_OBJECT_ALLOCATION_FAILURE;
+    }
+    
+    if (p_buffer->type() != MemObject::SubBuffer &&
+        p_buffer->flags() & CL_MEM_COPY_HOST_PTR)
+    {
+        memcpy(p_data, p_buffer->host_ptr(), buf_size);
+    }
+    
+    return CL_SUCCESS;
+}
+
+DeviceInterface *CPUBuffer::device() const
+{
+    return p_device;
 }
